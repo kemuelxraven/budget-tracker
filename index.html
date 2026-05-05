@@ -1,881 +1,1562 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maribank Expense Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --sun: #F5C518;
-    --petal: #E8A020;
-    --stem: #4A7C3F;
-    --leaf: #6BAE60;
-    --soil: #6B4423;
-    --bark: #4A2E0A;
-    --cream: #FDF6E3;
-    --light-petal: #FFF3CC;
-    --shadow: rgba(74,46,10,0.12);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maribank Expense Tracker</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --sun: #F5C518;
+            --petal: #E8A020;
+            --stem: #4A7C3F;
+            --leaf: #6BAE60;
+            --soil: #6B4423;
+            --bark: #4A2E0A;
+            --cream: #FDF6E3;
+            --light-petal: #FFF3CC;
+            --shadow: rgba(74, 46, 10, 0.12);
+        }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    min-height: 100vh;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(245,197,24,0.08) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(107,174,96,0.08) 0%, transparent 50%);
-  }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(245, 197, 24, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(107, 174, 96, 0.08) 0%, transparent 50%);
+        }
 
-  /* ── Header ── */
-  .header {
-    background: var(--bark);
-    color: var(--sun);
-    padding: 20px 24px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 20px rgba(74,46,10,0.3);
-  }
-  .header-inner { max-width: 640px; margin: 0 auto; }
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.3rem, 4vw, 1.7rem);
-    letter-spacing: 0.5px;
-  }
-  .header h1 span { color: #FFF3CC; font-weight: 400; font-size: 0.75em; display: block; margin-top: 2px; }
+        /* ── Header ── */
+        .header {
+            background: var(--bark);
+            color: var(--sun);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(74, 46, 10, 0.3);
+        }
 
-  /* ── Main container ── */
-  .container { max-width: 640px; margin: 0 auto; padding: 20px 16px 80px; }
+        .header-inner {
+            max-width: 640px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
 
-  /* ── Budget Card ── */
-  .budget-card {
-    background: var(--bark);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: 0 8px 32px rgba(74,46,10,0.25);
-    position: relative;
-    overflow: hidden;
-  }
-  .budget-card::before {
-    content: '🌻';
-    position: absolute;
-    right: 20px; top: 16px;
-    font-size: 3rem;
-    opacity: 0.18;
-    transform: rotate(15deg);
-  }
-  .budget-card label {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--petal);
-    display: block;
-    margin-bottom: 8px;
-  }
-  .budget-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .budget-display {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 6vw, 2.4rem);
-    color: var(--sun);
-    font-weight: 700;
-    cursor: pointer;
-    border-bottom: 2px dashed rgba(245,197,24,0.3);
-    padding-bottom: 2px;
-    transition: border-color 0.2s;
-    flex: 1;
-    min-width: 0;
-    word-break: break-all;
-  }
-  .budget-display:hover { border-color: var(--sun); }
-  .budget-input-wrap { display: none; flex: 1; gap: 8px; }
-  .budget-input-wrap.active { display: flex; }
-  .budget-input {
-    flex: 1;
-    background: rgba(255,255,255,0.1);
-    border: 2px solid var(--sun);
-    border-radius: 10px;
-    padding: 8px 12px;
-    color: var(--sun);
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    outline: none;
-    min-width: 0;
-  }
-  .btn-save-budget {
-    background: var(--sun);
-    color: var(--bark);
-    border: none;
-    border-radius: 10px;
-    padding: 8px 14px;
-    font-weight: 700;
-    cursor: pointer;
-    font-size: 0.85rem;
-    white-space: nowrap;
-  }
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            letter-spacing: 0.5px;
+        }
 
-  .budget-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 16px;
-  }
-  .stat-box {
-    background: rgba(255,255,255,0.07);
-    border-radius: 12px;
-    padding: 10px 14px;
-  }
-  .stat-box .slabel {
-    font-size: 0.65rem;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: rgba(255,243,204,0.6);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .stat-box .sval {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.15rem;
-    color: #FFF3CC;
-  }
-  .stat-box .sval.green { color: var(--leaf); }
-  .stat-box .sval.red { color: #FF8A65; }
+        .header h1 span {
+            color: #FFF3CC;
+            font-weight: 400;
+            font-size: 0.72em;
+            display: block;
+            margin-top: 1px;
+        }
 
-  /* ── Progress bar ── */
-  .progress-wrap { margin-top: 14px; }
-  .progress-bg {
-    height: 8px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--stem), var(--sun));
-    transition: width 0.5s ease;
-  }
-  .progress-label {
-    font-size: 0.7rem;
-    color: rgba(255,243,204,0.5);
-    margin-top: 5px;
-    text-align: right;
-  }
+        .btn-report-header {
+            background: rgba(245, 197, 24, 0.15);
+            border: 1.5px solid rgba(245, 197, 24, 0.4);
+            color: var(--sun);
+            border-radius: 10px;
+            padding: 7px 13px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
 
-  /* ── Section title ── */
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--soil);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .section-title::before {
-    content: '';
-    display: inline-block;
-    width: 4px; height: 18px;
-    background: var(--stem);
-    border-radius: 4px;
-    margin-right: 8px;
-  }
+        .btn-report-header:hover {
+            background: rgba(245, 197, 24, 0.28);
+        }
 
-  /* ── Add Category ── */
-  .add-cat-btn {
-    background: var(--stem);
-    color: #FFF3CC;
-    border: none;
-    border-radius: 12px;
-    padding: 8px 16px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.2s, transform 0.1s;
-  }
-  .add-cat-btn:active { transform: scale(0.97); }
-  .add-cat-btn:hover { background: var(--leaf); }
+        /* ── Container ── */
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 20px 16px 80px;
+        }
 
-  .add-cat-form {
-    background: #FFF8E8;
-    border: 2px solid var(--sun);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 16px;
-    display: none;
-  }
-  .add-cat-form.open { display: block; }
-  .form-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .form-row input {
-    flex: 1;
-    min-width: 100px;
-    border: 1.5px solid #E8D5A0;
-    border-radius: 10px;
-    padding: 9px 12px;
-    font-size: 0.9rem;
-    background: white;
-    outline: none;
-    color: var(--bark);
-    transition: border-color 0.2s;
-  }
-  .form-row input:focus { border-color: var(--petal); }
-  .btn-add {
-    background: var(--petal);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 9px 18px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.88rem;
-    white-space: nowrap;
-  }
-  .btn-cancel {
-    background: #E8D5A0;
-    color: var(--soil);
-    border: none;
-    border-radius: 10px;
-    padding: 9px 14px;
-    font-weight: 500;
-    cursor: pointer;
-    font-size: 0.88rem;
-  }
+        /* ── Budget Card ── */
+        .budget-card {
+            background: var(--bark);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(74, 46, 10, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
 
-  /* ── Category Cards ── */
-  .categories { display: flex; flex-direction: column; gap: 14px; }
+        .budget-card::before {
+            content: '🌻';
+            position: absolute;
+            right: 18px;
+            top: 14px;
+            font-size: 2.8rem;
+            opacity: 0.15;
+            transform: rotate(15deg);
+        }
 
-  .cat-card {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 2px 12px var(--shadow);
-    overflow: hidden;
-    border: 1.5px solid #F0E4C0;
-    transition: box-shadow 0.2s;
-  }
-  .cat-card:hover { box-shadow: 0 4px 20px rgba(74,46,10,0.15); }
+        .budget-card>label {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--petal);
+            display: block;
+            margin-bottom: 6px;
+        }
 
-  .cat-header {
-    display: flex;
-    align-items: center;
-    padding: 14px 16px 10px;
-    gap: 10px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .cat-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    background: var(--light-petal);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-  }
-  .cat-info { flex: 1; min-width: 0; }
-  .cat-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--bark);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .cat-budget-line {
-    font-size: 0.72rem;
-    color: #A08040;
-    margin-top: 2px;
-  }
-  .cat-amounts {
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .cat-remaining {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: var(--stem);
-  }
-  .cat-remaining.danger { color: #E64A19; }
-  .cat-remaining.warning { color: #E8A020; }
-  .cat-spent-label { font-size: 0.68rem; color: #A08040; }
+        .budget-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-  .cat-progress {
-    height: 5px;
-    background: #F0E4C0;
-    margin: 0 16px 0;
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .cat-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--stem), var(--leaf));
-    border-radius: 99px;
-    transition: width 0.4s ease;
-  }
-  .cat-progress-fill.warning { background: linear-gradient(90deg, var(--petal), var(--sun)); }
-  .cat-progress-fill.danger { background: linear-gradient(90deg, #E64A19, #FF8A65); }
+        .budget-display {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.7rem, 6vw, 2.3rem);
+            color: var(--sun);
+            font-weight: 700;
+            cursor: pointer;
+            border-bottom: 2px dashed rgba(245, 197, 24, 0.3);
+            padding-bottom: 2px;
+            transition: border-color 0.2s;
+            flex: 1;
+            min-width: 0;
+            word-break: break-all;
+        }
 
-  .cat-body {
-    padding: 10px 16px 14px;
-    display: none;
-  }
-  .cat-body.open { display: block; }
+        .budget-display:hover {
+            border-color: var(--sun);
+        }
 
-  /* expense input row */
-  .expense-input-row {
-    display: flex;
-    gap: 7px;
-    margin-bottom: 10px;
-    flex-wrap: wrap;
-  }
-  .expense-input-row input {
-    flex: 1;
-    min-width: 80px;
-    border: 1.5px solid #E8D5A0;
-    border-radius: 9px;
-    padding: 7px 10px;
-    font-size: 0.85rem;
-    color: var(--bark);
-    background: var(--cream);
-    outline: none;
-  }
-  .expense-input-row input:focus { border-color: var(--petal); }
-  .btn-log {
-    background: var(--stem);
-    color: white;
-    border: none;
-    border-radius: 9px;
-    padding: 7px 14px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.2s;
-  }
-  .btn-log:hover { background: var(--leaf); }
+        .budget-input-wrap {
+            display: none;
+            flex: 1;
+            gap: 8px;
+        }
 
-  /* expense log */
-  .expense-log { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
-  .expense-log::-webkit-scrollbar { width: 4px; }
-  .expense-log::-webkit-scrollbar-thumb { background: #E8D5A0; border-radius: 4px; }
+        .budget-input-wrap.active {
+            display: flex;
+        }
 
-  .expense-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    background: var(--cream);
-    border-radius: 9px;
-    border: 1px solid #F0E4C0;
-    animation: slideIn 0.25s ease;
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .expense-item .exp-note { flex: 1; font-size: 0.82rem; color: var(--soil); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .expense-item .exp-amount { font-weight: 600; color: var(--bark); font-size: 0.88rem; white-space: nowrap; }
-  .expense-item .exp-date { font-size: 0.65rem; color: #A08040; white-space: nowrap; }
-  .btn-del-exp {
-    background: none;
-    border: none;
-    color: #CCA070;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0 2px;
-    line-height: 1;
-    flex-shrink: 0;
-    transition: color 0.15s;
-  }
-  .btn-del-exp:hover { color: #E64A19; }
+        .budget-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--sun);
+            border-radius: 10px;
+            padding: 7px 12px;
+            color: var(--sun);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            outline: none;
+            min-width: 0;
+        }
 
-  .no-expenses { font-size: 0.8rem; color: #C0A060; text-align: center; padding: 12px 0; }
+        .btn-save-budget {
+            background: var(--sun);
+            color: var(--bark);
+            border: none;
+            border-radius: 10px;
+            padding: 7px 13px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
 
-  /* cat actions */
-  .cat-actions {
-    display: flex;
-    gap: 6px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #F0E4C0;
-  }
-  .btn-edit-cat, .btn-del-cat {
-    border: none;
-    border-radius: 8px;
-    padding: 5px 10px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    font-weight: 500;
-  }
-  .btn-edit-cat { background: #F0E4C0; color: var(--soil); }
-  .btn-del-cat { background: #FFDDD0; color: #B03000; }
+        /* ── Stats grid ── */
+        .budget-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px;
+        }
 
-  /* ── Edit modal ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(74,46,10,0.5);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 20px;
-    padding: 24px;
-    width: 100%;
-    max-width: 360px;
-    box-shadow: 0 20px 60px rgba(74,46,10,0.3);
-  }
-  .modal h3 {
-    font-family: 'Playfair Display', serif;
-    color: var(--bark);
-    margin-bottom: 16px;
-    font-size: 1.1rem;
-  }
-  .modal label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.8px; color: var(--soil); display: block; margin-bottom: 4px; margin-top: 12px; }
-  .modal input {
-    width: 100%;
-    border: 1.5px solid #E8D5A0;
-    border-radius: 10px;
-    padding: 9px 12px;
-    font-size: 0.9rem;
-    color: var(--bark);
-    outline: none;
-  }
-  .modal input:focus { border-color: var(--petal); }
-  .modal-actions { display: flex; gap: 8px; margin-top: 18px; }
-  .btn-modal-save {
-    flex: 1;
-    background: var(--petal);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  .btn-modal-cancel {
-    background: #E8D5A0;
-    color: var(--soil);
-    border: none;
-    border-radius: 10px;
-    padding: 10px 16px;
-    font-weight: 500;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
+        .stat-box {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 9px 13px;
+        }
 
-  /* ── Empty state ── */
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #A08040;
-  }
-  .empty-state .emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
-  .empty-state p { font-size: 0.9rem; }
+        .stat-box.highlight-excess {
+            background: rgba(107, 174, 96, 0.18);
+            border: 1px solid rgba(107, 174, 96, 0.3);
+        }
 
-  /* ── Toast ── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--bark);
-    color: var(--sun);
-    padding: 10px 20px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    z-index: 500;
-    transition: transform 0.3s ease;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
+        .stat-box.highlight-short {
+            background: rgba(230, 74, 25, 0.15);
+            border: 1px solid rgba(230, 74, 25, 0.3);
+        }
 
-  /* Chevron */
-  .chevron {
-    font-size: 0.7rem;
-    color: #C0A060;
-    transition: transform 0.25s;
-    flex-shrink: 0;
-  }
-  .chevron.up { transform: rotate(180deg); }
+        .stat-box .slabel {
+            font-size: 0.6rem;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: rgba(255, 243, 204, 0.55);
+            display: block;
+            margin-bottom: 3px;
+        }
 
-  /* ── Over budget warning ── */
-  .over-budget-badge {
-    background: #FFDDD0;
-    color: #B03000;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 2px 6px;
-    border-radius: 6px;
-    text-transform: uppercase;
-  }
+        .stat-box .sval {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: #FFF3CC;
+        }
 
-  @media (max-width: 380px) {
-    .budget-stats { grid-template-columns: 1fr 1fr; }
-    .cat-name { font-size: 0.88rem; }
-  }
-</style>
+        .stat-box .sval.green {
+            color: var(--leaf);
+        }
+
+        .stat-box .sval.red {
+            color: #FF8A65;
+        }
+
+        .stat-box .sval.yellow {
+            color: var(--sun);
+        }
+
+        .stat-box .shint {
+            font-size: 0.58rem;
+            color: rgba(255, 243, 204, 0.38);
+            display: block;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+
+        /* ── Progress bar ── */
+        .progress-wrap {
+            margin-top: 12px;
+        }
+
+        .progress-bg {
+            height: 7px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--stem), var(--sun));
+            transition: width 0.5s ease;
+        }
+
+        .progress-label {
+            font-size: 0.66rem;
+            color: rgba(255, 243, 204, 0.45);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* ── Section title ── */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            color: var(--soil);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .section-title-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title-left::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 17px;
+            background: var(--stem);
+            border-radius: 4px;
+        }
+
+        /* ── Add Category ── */
+        .add-cat-btn {
+            background: var(--stem);
+            color: #FFF3CC;
+            border: none;
+            border-radius: 12px;
+            padding: 7px 14px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .add-cat-btn:active {
+            transform: scale(0.97);
+        }
+
+        .add-cat-btn:hover {
+            background: var(--leaf);
+        }
+
+        .add-cat-form {
+            background: #FFF8E8;
+            border: 2px solid var(--sun);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .add-cat-form.open {
+            display: block;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .form-row input {
+            flex: 1;
+            min-width: 100px;
+            border: 1.5px solid #E8D5A0;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.88rem;
+            background: white;
+            outline: none;
+            color: var(--bark);
+            transition: border-color 0.2s;
+        }
+
+        .form-row input:focus {
+            border-color: var(--petal);
+        }
+
+        .btn-add {
+            background: var(--petal);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.86rem;
+            white-space: nowrap;
+        }
+
+        .btn-cancel {
+            background: #E8D5A0;
+            color: var(--soil);
+            border: none;
+            border-radius: 10px;
+            padding: 8px 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.86rem;
+        }
+
+        /* ── Category Cards ── */
+        .categories {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+        }
+
+        .cat-card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px var(--shadow);
+            overflow: hidden;
+            border: 1.5px solid #F0E4C0;
+            transition: box-shadow 0.2s;
+        }
+
+        .cat-card:hover {
+            box-shadow: 0 4px 20px rgba(74, 46, 10, 0.15);
+        }
+
+        .cat-card.depleted {
+            border-color: #FFDDD0;
+        }
+
+        .cat-header {
+            display: flex;
+            align-items: center;
+            padding: 13px 15px 9px;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .cat-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cat-name {
+            font-weight: 600;
+            font-size: 0.93rem;
+            color: var(--bark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .cat-budget-line {
+            font-size: 0.7rem;
+            color: #A08040;
+            margin-top: 2px;
+        }
+
+        .cat-amounts {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .cat-remaining {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--stem);
+        }
+
+        .cat-remaining.danger {
+            color: #E64A19;
+        }
+
+        .cat-remaining.warning {
+            color: #E8A020;
+        }
+
+        .cat-remaining.zero {
+            color: #A08040;
+        }
+
+        .cat-spent-label {
+            font-size: 0.66rem;
+            color: #A08040;
+        }
+
+        .cat-progress {
+            height: 5px;
+            background: #F0E4C0;
+            margin: 0 15px;
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .cat-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--stem), var(--leaf));
+            border-radius: 99px;
+            transition: width 0.4s ease;
+        }
+
+        .cat-progress-fill.warning {
+            background: linear-gradient(90deg, var(--petal), var(--sun));
+        }
+
+        .cat-progress-fill.danger {
+            background: linear-gradient(90deg, #E64A19, #FF8A65);
+        }
+
+        .cat-body {
+            padding: 10px 15px 13px;
+            display: none;
+        }
+
+        .cat-body.open {
+            display: block;
+        }
+
+        /* depleted notice */
+        .depleted-notice {
+            background: #FFF3F0;
+            border: 1px solid #FFDDD0;
+            border-radius: 9px;
+            padding: 8px 12px;
+            font-size: 0.77rem;
+            color: #B03000;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1.4;
+        }
+
+        /* expense input row */
+        .expense-input-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 9px;
+            flex-wrap: wrap;
+        }
+
+        .expense-input-row input {
+            flex: 1;
+            min-width: 80px;
+            border: 1.5px solid #E8D5A0;
+            border-radius: 9px;
+            padding: 7px 9px;
+            font-size: 0.83rem;
+            color: var(--bark);
+            background: var(--cream);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .expense-input-row input:focus {
+            border-color: var(--petal);
+        }
+
+        .expense-input-row input:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-log {
+            background: var(--stem);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 7px 13px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-log:hover:not(:disabled) {
+            background: var(--leaf);
+        }
+
+        .btn-log:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: #A08040;
+        }
+
+        /* expense log */
+        .expense-log {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .expense-log::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .expense-log::-webkit-scrollbar-thumb {
+            background: #E8D5A0;
+            border-radius: 4px;
+        }
+
+        .expense-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            background: var(--cream);
+            border-radius: 9px;
+            border: 1px solid #F0E4C0;
+            animation: slideIn 0.25s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .exp-main {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exp-note {
+            font-size: 0.82rem;
+            color: var(--soil);
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .exp-date {
+            font-size: 0.64rem;
+            color: #A08040;
+            display: block;
+            margin-top: 1px;
+        }
+
+        .exp-amount {
+            font-weight: 600;
+            color: var(--bark);
+            font-size: 0.86rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn-del-exp {
+            background: none;
+            border: none;
+            color: #CCA070;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 2px;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: color 0.15s;
+        }
+
+        .btn-del-exp:hover {
+            color: #E64A19;
+        }
+
+        .no-expenses {
+            font-size: 0.78rem;
+            color: #C0A060;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* cat actions */
+        .cat-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 9px;
+            padding-top: 9px;
+            border-top: 1px solid #F0E4C0;
+        }
+
+        .btn-edit-cat,
+        .btn-del-cat {
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.73rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-edit-cat {
+            background: #F0E4C0;
+            color: var(--soil);
+        }
+
+        .btn-del-cat {
+            background: #FFDDD0;
+            color: #B03000;
+        }
+
+        /* badges */
+        .over-budget-badge {
+            background: #FFDDD0;
+            color: #B03000;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .zero-badge {
+            background: #E8D5A0;
+            color: var(--soil);
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* chevron */
+        .chevron {
+            font-size: 0.68rem;
+            color: #C0A060;
+            transition: transform 0.25s;
+            flex-shrink: 0;
+        }
+
+        .chevron.up {
+            transform: rotate(180deg);
+        }
+
+        /* ── Edit modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(74, 46, 10, 0.5);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 20px 60px rgba(74, 46, 10, 0.3);
+        }
+
+        .modal h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--bark);
+            margin-bottom: 14px;
+            font-size: 1.05rem;
+        }
+
+        .modal label {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            color: var(--soil);
+            display: block;
+            margin-bottom: 4px;
+            margin-top: 11px;
+        }
+
+        .modal input {
+            width: 100%;
+            border: 1.5px solid #E8D5A0;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            color: var(--bark);
+            outline: none;
+        }
+
+        .modal input:focus {
+            border-color: var(--petal);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-modal-save {
+            flex: 1;
+            background: var(--petal);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.88rem;
+        }
+
+        .btn-modal-cancel {
+            background: #E8D5A0;
+            color: var(--soil);
+            border: none;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.88rem;
+        }
+
+        /* ── Report modal ── */
+        .report-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 22px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(74, 46, 10, 0.3);
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+
+        .report-modal::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .report-modal::-webkit-scrollbar-thumb {
+            background: #E8D5A0;
+            border-radius: 4px;
+        }
+
+        .report-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .report-header-row h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--bark);
+            font-size: 1.1rem;
+        }
+
+        .btn-close-report {
+            background: #F0E4C0;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: var(--soil);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .report-month {
+            border: 1.5px solid #F0E4C0;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .report-month-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 15px;
+            background: #FFF8E8;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .report-month-hdr:hover {
+            background: #FFF3CC;
+        }
+
+        .report-month-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--bark);
+        }
+
+        .report-month-total {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            color: var(--stem);
+            font-weight: 600;
+        }
+
+        .report-month-body {
+            display: none;
+            padding: 10px 15px 13px;
+        }
+
+        .report-month-body.open {
+            display: block;
+        }
+
+        .report-cat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+            border-bottom: 1px dashed #F0E4C0;
+            font-size: 0.84rem;
+        }
+
+        .report-cat-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .report-cat-name {
+            color: var(--soil);
+            font-weight: 500;
+        }
+
+        .report-cat-amt {
+            font-weight: 700;
+            color: var(--bark);
+        }
+
+        .report-exp-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            margin-bottom: 4px;
+        }
+
+        .report-exp-item {
+            display: flex;
+            gap: 8px;
+            font-size: 0.74rem;
+            color: #A08040;
+            padding: 2px 0 2px 10px;
+            border-left: 2px solid #F0E4C0;
+        }
+
+        .rexp-note {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .rexp-date {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .rexp-amt {
+            font-weight: 600;
+            color: var(--bark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .report-empty {
+            text-align: center;
+            padding: 28px;
+            color: #A08040;
+            font-size: 0.88rem;
+        }
+
+        .report-grand-total {
+            background: var(--bark);
+            color: var(--sun);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .report-grand-total span {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--petal);
+        }
+
+        .report-grand-total strong {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 38px 20px;
+            color: #A08040;
+        }
+
+        .empty-state .emoji {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 0.88rem;
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 22px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--bark);
+            color: var(--sun);
+            padding: 9px 20px;
+            border-radius: 30px;
+            font-size: 0.84rem;
+            font-weight: 500;
+            z-index: 500;
+            transition: transform 0.3s ease;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 400px) {
+            .budget-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .expense-input-row {
+                gap: 5px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="header">
-  <div class="header-inner">
-    <h1>🌻 Maribank Expenses<span>Sunflower Budget Tracker</span></h1>
-  </div>
-</div>
-
-<div class="container">
-
-  <!-- Budget Card -->
-  <div class="budget-card">
-    <label>Total Budget from Maribank</label>
-    <div class="budget-row">
-      <div class="budget-display" id="budgetDisplay" onclick="editBudget()">₱0.00</div>
-      <div class="budget-input-wrap" id="budgetInputWrap">
-        <input type="number" id="budgetInput" class="budget-input" placeholder="0.00" min="0" step="0.01">
-        <button class="btn-save-budget" onclick="saveBudget()">Save</button>
-      </div>
+    <div class="header">
+        <div class="header-inner">
+            <h1>🌻 Maribank Expenses<span>Sunflower Budget Tracker</span></h1>
+            <button class="btn-report-header" onclick="openReport()">📊 Reports</button>
+        </div>
     </div>
-    <div class="budget-stats">
-      <div class="stat-box">
-        <span class="slabel">Total Spent</span>
-        <span class="sval red" id="totalSpent">₱0.00</span>
-      </div>
-      <div class="stat-box">
-        <span class="slabel">Remaining</span>
-        <span class="sval green" id="totalRemaining">₱0.00</span>
-      </div>
+
+    <div class="container">
+
+        <!-- Budget Card -->
+        <div class="budget-card">
+            <label>Total Budget from Maribank</label>
+            <div class="budget-row">
+                <div class="budget-display" id="budgetDisplay" onclick="editBudget()">₱0.00</div>
+                <div class="budget-input-wrap" id="budgetInputWrap">
+                    <input type="number" id="budgetInput" class="budget-input" placeholder="0.00" min="0" step="0.01">
+                    <button class="btn-save-budget" onclick="saveBudget()">Save</button>
+                </div>
+            </div>
+
+            <div class="budget-stats">
+                <div class="stat-box">
+                    <span class="slabel">Total Spent</span>
+                    <span class="sval red" id="totalSpent">₱0.00</span>
+                </div>
+                <div class="stat-box">
+                    <span class="slabel">Remaining (Maribank)</span>
+                    <span class="sval green" id="totalRemaining">₱0.00</span>
+                </div>
+                <div class="stat-box">
+                    <span class="slabel">Remaining (Categories)</span>
+                    <span class="sval yellow" id="catTotalRemaining">₱0.00</span>
+                    <span class="shint" id="catRemHint">sum of all budgets left</span>
+                </div>
+                <div class="stat-box" id="diffStatBox">
+                    <span class="slabel" id="diffLabel">Excess</span>
+                    <span class="sval green" id="diffVal">₱0.00</span>
+                    <span class="shint" id="diffHint">unallocated from Maribank</span>
+                </div>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="progress-bg">
+                    <div class="progress-fill" id="totalProgress" style="width:0%"></div>
+                </div>
+                <div class="progress-label" id="progressLabel">0% used</div>
+            </div>
+        </div>
+
+        <!-- Categories section -->
+        <div class="section-title">
+            <div class="section-title-left">Budget Categories</div>
+            <button class="add-cat-btn" onclick="toggleAddForm()">＋ Add Category</button>
+        </div>
+
+        <!-- Add Category Form -->
+        <div class="add-cat-form" id="addCatForm">
+            <div class="form-row">
+                <input type="text" id="newCatName" placeholder="Category name (e.g. House)" maxlength="30">
+                <input type="number" id="newCatBudget" placeholder="Budget ₱" min="0" step="0.01">
+            </div>
+            <div class="form-row" style="margin-top:8px;">
+                <button class="btn-add" onclick="addCategory()">Add</button>
+                <button class="btn-cancel" onclick="toggleAddForm()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Categories list -->
+        <div class="categories" id="categoriesList"></div>
+        <div class="empty-state" id="emptyState" style="display:none;">
+            <span class="emoji">🌱</span>
+            <p>No categories yet.<br>Add your first budget category above!</p>
+        </div>
     </div>
-    <div class="progress-wrap">
-      <div class="progress-bg">
-        <div class="progress-fill" id="totalProgress" style="width:0%"></div>
-      </div>
-      <div class="progress-label" id="progressLabel">0% used</div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3>Edit Category</h3>
+            <label>Category Name</label>
+            <input type="text" id="editName" maxlength="30">
+            <label>Category Budget (₱)</label>
+            <input type="number" id="editBudgetAmount" min="0" step="0.01">
+            <div class="modal-actions">
+                <button class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+                <button class="btn-modal-save" onclick="saveEdit()">Save Changes</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Categories section -->
-  <div class="section-title">
-    <span>Budget Categories</span>
-    <button class="add-cat-btn" onclick="toggleAddForm()">＋ Add Category</button>
-  </div>
-
-  <!-- Add Category Form -->
-  <div class="add-cat-form" id="addCatForm">
-    <div class="form-row">
-      <input type="text" id="newCatName" placeholder="Category name (e.g. House)" maxlength="30">
-      <input type="number" id="newCatBudget" placeholder="Budget ₱" min="0" step="0.01">
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="report-modal">
+            <div class="report-header-row">
+                <h3>📊 Monthly Report</h3>
+                <button class="btn-close-report" onclick="closeReport()">✕ Close</button>
+            </div>
+            <div id="reportBody"></div>
+        </div>
     </div>
-    <div class="form-row" style="margin-top:8px;">
-      <button class="btn-add" onclick="addCategory()">Add</button>
-      <button class="btn-cancel" onclick="toggleAddForm()">Cancel</button>
-    </div>
-  </div>
 
-  <!-- Categories list -->
-  <div class="categories" id="categoriesList"></div>
+    <div class="toast" id="toast"></div>
 
-  <!-- Empty state -->
-  <div class="empty-state" id="emptyState" style="display:none;">
-    <span class="emoji">🌱</span>
-    <p>No categories yet.<br>Add your first budget category above!</p>
-  </div>
+    <script>
+        // ── State ──────────────────────────────────────────────────
+        let state = { totalBudget: 0, categories: [] };
+        let editingId = null;
 
-</div>
+        // ── Persistence ────────────────────────────────────────────
+        function save() { localStorage.setItem('maribank_v3', JSON.stringify(state)); }
+        function load() {
+            // migrate from old key if needed
+            const raw = localStorage.getItem('maribank_v3')
+                || localStorage.getItem('maribank_tracker_v2')
+                || localStorage.getItem('maribank_tracker');
+            if (raw) { try { state = JSON.parse(raw); } catch (e) { } }
+        }
 
-<!-- Edit Modal -->
-<div class="modal-overlay" id="editModal">
-  <div class="modal">
-    <h3>Edit Category</h3>
-    <label>Category Name</label>
-    <input type="text" id="editName" maxlength="30">
-    <label>Category Budget (₱)</label>
-    <input type="number" id="editBudgetAmount" min="0" step="0.01">
-    <div class="modal-actions">
-      <button class="btn-modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-modal-save" onclick="saveEdit()">Save Changes</button>
-    </div>
-  </div>
-</div>
+        // ── Helpers ────────────────────────────────────────────────
+        function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+        function fmt(n) { return '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
-<div class="toast" id="toast"></div>
+        function todayISO() {
+            const d = new Date();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${d.getFullYear()}-${mm}-${dd}`;
+        }
 
-<script>
-// ── State ──────────────────────────────────────────────────
-let state = {
-  totalBudget: 0,
-  categories: []
-  // categories: [{ id, name, emoji, budget, expenses: [{id, note, amount, date}] }]
-};
-let editingId = null;
+        const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
 
-// ── Persistence ────────────────────────────────────────────
-function save() {
-  localStorage.setItem('maribank_tracker', JSON.stringify(state));
-}
-function load() {
-  const raw = localStorage.getItem('maribank_tracker');
-  if (raw) {
-    try { state = JSON.parse(raw); } catch(e) {}
-  }
-}
+        function isoToLabel(iso) { // "2026-05-03" → "May 3, 2026"
+            const [y, m, d] = iso.split('-');
+            return `${MONTHS_SHORT[parseInt(m) - 1]} ${parseInt(d)}, ${y}`;
+        }
 
-// ── Helpers ────────────────────────────────────────────────
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
-function fmt(n) { return '₱' + Number(n).toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function today() {
-  const d = new Date();
-  return (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getDate().toString().padStart(2,'0');
-}
-function catSpent(cat) { return cat.expenses.reduce((s, e) => s + Number(e.amount), 0); }
-function totalSpent() { return state.categories.reduce((s, c) => s + catSpent(c), 0); }
+        function isoToMonthKey(iso) { return iso ? iso.slice(0, 7) : '0000-00'; } // "2026-05"
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
+        function catSpent(cat) { return cat.expenses.reduce((s, e) => s + Number(e.amount), 0); }
+        function totalSpentAll() { return state.categories.reduce((s, c) => s + catSpent(c), 0); }
+        function catTotalRem() {
+            return state.categories.reduce((s, c) => s + Math.max(0, c.budget - catSpent(c)), 0);
+        }
+        function isDepleted(cat) { return cat.budget > 0 && catSpent(cat) >= cat.budget; }
 
-// ── Budget editing ──────────────────────────────────────────
-function editBudget() {
-  document.getElementById('budgetDisplay').style.display = 'none';
-  const wrap = document.getElementById('budgetInputWrap');
-  wrap.classList.add('active');
-  const inp = document.getElementById('budgetInput');
-  inp.value = state.totalBudget || '';
-  inp.focus();
-}
-function saveBudget() {
-  const val = parseFloat(document.getElementById('budgetInput').value);
-  if (isNaN(val) || val < 0) { showToast('Enter a valid amount'); return; }
-  state.totalBudget = val;
-  save();
-  document.getElementById('budgetInputWrap').classList.remove('active');
-  document.getElementById('budgetDisplay').style.display = '';
-  render();
-  showToast('Budget updated ✓');
-}
-document.getElementById('budgetInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') saveBudget();
-  if (e.key === 'Escape') {
-    document.getElementById('budgetInputWrap').classList.remove('active');
-    document.getElementById('budgetDisplay').style.display = '';
-  }
-});
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2200);
+        }
 
-// ── Add category form ───────────────────────────────────────
-function toggleAddForm() {
-  const f = document.getElementById('addCatForm');
-  f.classList.toggle('open');
-  if (f.classList.contains('open')) document.getElementById('newCatName').focus();
-}
-function addCategory() {
-  const name = document.getElementById('newCatName').value.trim();
-  const budget = parseFloat(document.getElementById('newCatBudget').value);
-  if (!name) { showToast('Enter a category name'); return; }
-  if (isNaN(budget) || budget < 0) { showToast('Enter a valid budget'); return; }
-  state.categories.push({ id: uid(), name, budget, expenses: [] });
-  save();
-  document.getElementById('newCatName').value = '';
-  document.getElementById('newCatBudget').value = '';
-  document.getElementById('addCatForm').classList.remove('open');
-  render();
-  showToast(`${name} added!`);
-}
+        // ── Budget editing ──────────────────────────────────────────
+        function editBudget() {
+            document.getElementById('budgetDisplay').style.display = 'none';
+            document.getElementById('budgetInputWrap').classList.add('active');
+            const inp = document.getElementById('budgetInput');
+            inp.value = state.totalBudget || '';
+            inp.focus();
+        }
+        function saveBudget() {
+            const val = parseFloat(document.getElementById('budgetInput').value);
+            if (isNaN(val) || val < 0) { showToast('Enter a valid amount'); return; }
+            state.totalBudget = val;
+            save();
+            document.getElementById('budgetInputWrap').classList.remove('active');
+            document.getElementById('budgetDisplay').style.display = '';
+            renderBudgetCard();
+            showToast('Budget updated ✓');
+        }
+        document.getElementById('budgetInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') saveBudget();
+            if (e.key === 'Escape') {
+                document.getElementById('budgetInputWrap').classList.remove('active');
+                document.getElementById('budgetDisplay').style.display = '';
+            }
+        });
 
-// ── Expense logging ─────────────────────────────────────────
-function logExpense(catId) {
-  const noteEl = document.getElementById('expNote_' + catId);
-  const amtEl  = document.getElementById('expAmt_' + catId);
-  const dateEl = document.getElementById('expDate_' + catId);
-  const note   = noteEl.value.trim();
-  const amount = parseFloat(amtEl.value);
-  const dateVal = dateEl.value; // yyyy-mm-dd
-  if (!note) { showToast('Add a note'); return; }
-  if (isNaN(amount) || amount <= 0) { showToast('Enter a valid amount'); return; }
-  if (!dateVal) { showToast('Pick a date'); return; }
-  // Format date as Month DD, YYYY
-  const [y, m, d] = dateVal.split('-');
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const dateFormatted = `${months[parseInt(m)-1]} ${parseInt(d)}, ${y}`;
-  const cat = state.categories.find(c => c.id === catId);
-  if (!cat) return;
-  cat.expenses.unshift({ id: uid(), note, amount, date: dateFormatted });
-  save();
-  noteEl.value = '';
-  amtEl.value = '';
-  // keep date as-is for convenience
-  renderCatBody(catId);
-  renderBudgetCard();
-  showToast('Expense recorded ✓');
-}
+        // ── Add Category ────────────────────────────────────────────
+        function toggleAddForm() {
+            const f = document.getElementById('addCatForm');
+            f.classList.toggle('open');
+            if (f.classList.contains('open')) document.getElementById('newCatName').focus();
+        }
+        function addCategory() {
+            const name = document.getElementById('newCatName').value.trim();
+            const budget = parseFloat(document.getElementById('newCatBudget').value);
+            if (!name) { showToast('Enter a category name'); return; }
+            if (isNaN(budget) || budget < 0) { showToast('Enter a valid budget'); return; }
+            state.categories.push({ id: uid(), name, budget, expenses: [] });
+            save();
+            document.getElementById('newCatName').value = '';
+            document.getElementById('newCatBudget').value = '';
+            document.getElementById('addCatForm').classList.remove('open');
+            render();
+            showToast(`${name} added!`);
+        }
 
-function deleteExpense(catId, expId) {
-  const cat = state.categories.find(c => c.id === catId);
-  if (!cat) return;
-  cat.expenses = cat.expenses.filter(e => e.id !== expId);
-  save();
-  renderCatBody(catId);
-  renderBudgetCard();
-  showToast('Removed');
-}
+        // ── Log Expense ─────────────────────────────────────────────
+        function logExpense(catId) {
+            const noteEl = document.getElementById('expNote_' + catId);
+            const amtEl = document.getElementById('expAmt_' + catId);
+            const dateEl = document.getElementById('expDate_' + catId);
+            const note = noteEl.value.trim();
+            const amount = parseFloat(amtEl.value);
+            const dateISO = dateEl.value;
+            if (!note) { showToast('Add a note'); return; }
+            if (isNaN(amount) || amount <= 0) { showToast('Enter a valid amount'); return; }
+            if (!dateISO) { showToast('Pick a date'); return; }
+            const cat = state.categories.find(c => c.id === catId);
+            if (!cat) return;
+            cat.expenses.unshift({ id: uid(), note, amount, date: isoToLabel(dateISO), dateRaw: dateISO });
+            save();
+            noteEl.value = '';
+            amtEl.value = '';
+            // keep date filled for convenience
+            renderCatBody(catId);
+            renderBudgetCard();
+            showToast('Expense recorded ✓');
+        }
 
-// ── Edit category ───────────────────────────────────────────
-function openEdit(catId) {
-  const cat = state.categories.find(c => c.id === catId);
-  if (!cat) return;
-  editingId = catId;
-  document.getElementById('editName').value = cat.name;
-  document.getElementById('editBudgetAmount').value = cat.budget;
-  document.getElementById('editModal').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('editModal').classList.remove('open');
-  editingId = null;
-}
-function saveEdit() {
-  const cat = state.categories.find(c => c.id === editingId);
-  if (!cat) return;
-  const name   = document.getElementById('editName').value.trim();
-  const budget = parseFloat(document.getElementById('editBudgetAmount').value);
-  if (!name || isNaN(budget) || budget < 0) { showToast('Fill in all fields'); return; }
-  cat.name = name; cat.budget = budget;
-  save(); closeModal(); render();
-  showToast('Category updated ✓');
-}
+        function deleteExpense(catId, expId) {
+            const cat = state.categories.find(c => c.id === catId);
+            if (!cat) return;
+            cat.expenses = cat.expenses.filter(e => e.id !== expId);
+            save();
+            renderCatBody(catId);
+            renderBudgetCard();
+            showToast('Removed');
+        }
 
-function deleteCategory(catId) {
-  if (!confirm('Delete this category and all its expenses?')) return;
-  state.categories = state.categories.filter(c => c.id !== catId);
-  save(); render();
-  showToast('Category deleted');
-}
+        // ── Edit Category ───────────────────────────────────────────
+        function openEdit(catId) {
+            const cat = state.categories.find(c => c.id === catId);
+            if (!cat) return;
+            editingId = catId;
+            document.getElementById('editName').value = cat.name;
+            document.getElementById('editBudgetAmount').value = cat.budget;
+            document.getElementById('editModal').classList.add('open');
+        }
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('open');
+            editingId = null;
+        }
+        function saveEdit() {
+            const cat = state.categories.find(c => c.id === editingId);
+            if (!cat) return;
+            const name = document.getElementById('editName').value.trim();
+            const budget = parseFloat(document.getElementById('editBudgetAmount').value);
+            if (!name || isNaN(budget) || budget < 0) { showToast('Fill in all fields'); return; }
+            cat.name = name; cat.budget = budget;
+            save(); closeEditModal(); render();
+            showToast('Category updated ✓');
+        }
+        function deleteCategory(catId) {
+            if (!confirm('Delete this category and all its expenses?')) return;
+            state.categories = state.categories.filter(c => c.id !== catId);
+            save(); render();
+            showToast('Category deleted');
+        }
 
-// ── Toggle category body ────────────────────────────────────
-function toggleCat(catId) {
-  const body = document.getElementById('catBody_' + catId);
-  const chev = document.getElementById('chev_' + catId);
-  if (body) {
-    body.classList.toggle('open');
-    if (chev) chev.classList.toggle('up');
-  }
-}
+        // ── Toggle category body ────────────────────────────────────
+        function toggleCat(catId) {
+            const body = document.getElementById('catBody_' + catId);
+            const chev = document.getElementById('chev_' + catId);
+            if (body) { body.classList.toggle('open'); if (chev) chev.classList.toggle('up'); }
+        }
 
-// ── Render ─────────────────────────────────────────────────
-function renderBudgetCard() {
-  const spent = totalSpent();
-  const rem   = state.totalBudget - spent;
-  const pct   = state.totalBudget > 0 ? Math.min((spent / state.totalBudget) * 100, 100) : 0;
-  document.getElementById('budgetDisplay').textContent = fmt(state.totalBudget);
-  document.getElementById('totalSpent').textContent    = fmt(spent);
-  const remEl = document.getElementById('totalRemaining');
-  remEl.textContent = fmt(rem);
-  remEl.className = 'sval ' + (rem < 0 ? 'red' : 'green');
-  document.getElementById('totalProgress').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = pct.toFixed(0) + '% used';
-}
+        // ── Report ──────────────────────────────────────────────────
+        function openReport() { buildReport(); document.getElementById('reportModal').classList.add('open'); }
+        function closeReport() { document.getElementById('reportModal').classList.remove('open'); }
 
-function renderCatBody(catId) {
-  const cat  = state.categories.find(c => c.id === catId);
-  const body = document.getElementById('catBody_' + catId);
-  if (!cat || !body) return;
+        function buildReport() {
+            const body = document.getElementById('reportBody');
+            const allExp = [];
+            state.categories.forEach(cat => {
+                cat.expenses.forEach(e => allExp.push({ ...e, catName: cat.name }));
+            });
 
-  const spent = catSpent(cat);
-  const rem   = cat.budget - spent;
-  const pct   = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
-  const cls   = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : '';
+            if (allExp.length === 0) {
+                body.innerHTML = '<div class="report-empty">🌱 No expenses logged yet.</div>';
+                return;
+            }
 
-  // Update amounts in header
-  const remEl = document.getElementById('catRem_' + catId);
-  if (remEl) {
-    remEl.textContent = fmt(rem);
-    remEl.className = 'cat-remaining' + (rem < 0 ? ' danger' : rem < cat.budget * 0.2 ? ' warning' : '');
-  }
-  const spentEl = document.getElementById('catSpentLbl_' + catId);
-  if (spentEl) spentEl.textContent = fmt(spent) + ' spent';
+            // Group by month
+            const monthMap = {};
+            allExp.forEach(e => {
+                const key = e.dateRaw ? isoToMonthKey(e.dateRaw) : parseFallbackKey(e.date);
+                if (!monthMap[key]) monthMap[key] = [];
+                monthMap[key].push(e);
+            });
 
-  const progEl = document.getElementById('catProg_' + catId);
-  if (progEl) {
-    progEl.style.width = pct + '%';
-    progEl.className = 'cat-progress-fill ' + cls;
-  }
+            const sortedKeys = Object.keys(monthMap).sort((a, b) => b.localeCompare(a));
+            const grandTotal = allExp.reduce((s, e) => s + Number(e.amount), 0);
 
-  const badgeEl = document.getElementById('catBadge_' + catId);
-  if (badgeEl) badgeEl.style.display = rem < 0 ? 'inline' : 'none';
+            let html = '';
+            sortedKeys.forEach((key, idx) => {
+                const exps = monthMap[key];
+                const [y, m] = key.split('-');
+                const monthLabel = `${MONTHS_FULL[parseInt(m) - 1]} ${y}`;
+                const monthTotal = exps.reduce((s, e) => s + Number(e.amount), 0);
 
-  // Expense log
-  const logEl = document.getElementById('catLog_' + catId);
-  if (!logEl) return;
-  if (cat.expenses.length === 0) {
-    logEl.innerHTML = '<div class="no-expenses">No expenses yet</div>';
-    return;
-  }
-  logEl.innerHTML = cat.expenses.map(e => `
+                // group by category within month
+                const catMap = {};
+                exps.forEach(e => {
+                    if (!catMap[e.catName]) catMap[e.catName] = [];
+                    catMap[e.catName].push(e);
+                });
+
+                const catRows = Object.entries(catMap).map(([name, ces]) => {
+                    const catAmt = ces.reduce((s, e) => s + Number(e.amount), 0);
+                    const expItems = ces.map(e => `
+        <div class="report-exp-item">
+          <span class="rexp-note">${e.note}</span>
+          <span class="rexp-date">${e.date}</span>
+          <span class="rexp-amt">${fmt(e.amount)}</span>
+        </div>`).join('');
+                    return `
+        <div class="report-cat-row">
+          <span class="report-cat-name">${name}</span>
+          <span class="report-cat-amt">${fmt(catAmt)}</span>
+        </div>
+        <div class="report-exp-list">${expItems}</div>`;
+                }).join('');
+
+                const isFirst = idx === 0;
+                html += `
+      <div class="report-month">
+        <div class="report-month-hdr" onclick="toggleReportMonth('rm${idx}')">
+          <span class="report-month-name">📅 ${monthLabel}</span>
+          <span class="report-month-total">${fmt(monthTotal)}</span>
+        </div>
+        <div class="report-month-body${isFirst ? ' open' : ''}" id="rm${idx}">
+          ${catRows}
+        </div>
+      </div>`;
+            });
+
+            html += `
+    <div class="report-grand-total">
+      <span>Grand Total All Expenses</span>
+      <strong>${fmt(grandTotal)}</strong>
+    </div>`;
+
+            body.innerHTML = html;
+        }
+
+        function toggleReportMonth(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('open');
+        }
+
+        // fallback: "May 3, 2026" → "2026-05"
+        function parseFallbackKey(dateStr) {
+            if (!dateStr) return '0000-00';
+            const parts = dateStr.replace(',', '').split(' ');
+            if (parts.length < 3) return '0000-00';
+            const mi = MONTHS_SHORT.indexOf(parts[0]);
+            return `${parts[2]}-${String(mi + 1).padStart(2, '0')}`;
+        }
+
+        // ── Render Budget Card ──────────────────────────────────────
+        function renderBudgetCard() {
+            const spent = totalSpentAll();
+            const maribankRem = state.totalBudget - spent;
+            const catRem = catTotalRem();
+            const diff = maribankRem - catRem; // >0 excess, <0 short
+            const pct = state.totalBudget > 0 ? Math.min((spent / state.totalBudget) * 100, 100) : 0;
+
+            document.getElementById('budgetDisplay').textContent = fmt(state.totalBudget);
+            document.getElementById('totalSpent').textContent = fmt(spent);
+
+            const remEl = document.getElementById('totalRemaining');
+            remEl.textContent = fmt(maribankRem);
+            remEl.className = 'sval ' + (maribankRem < 0 ? 'red' : 'green');
+
+            document.getElementById('catTotalRemaining').textContent = fmt(catRem);
+
+            const diffBox = document.getElementById('diffStatBox');
+            const diffLbl = document.getElementById('diffLabel');
+            const diffVal = document.getElementById('diffVal');
+            const diffHint = document.getElementById('diffHint');
+            diffBox.className = 'stat-box';
+
+            if (diff > 0.005) {
+                diffLbl.textContent = 'Excess';
+                diffVal.textContent = fmt(diff);
+                diffVal.className = 'sval green';
+                diffHint.textContent = 'Maribank has more than categories need';
+                diffBox.classList.add('highlight-excess');
+            } else if (diff < -0.005) {
+                diffLbl.textContent = 'Short Budget';
+                diffVal.textContent = fmt(Math.abs(diff));
+                diffVal.className = 'sval red';
+                diffHint.textContent = 'Categories exceed Maribank remaining';
+                diffBox.classList.add('highlight-short');
+            } else {
+                diffLbl.textContent = 'Balanced';
+                diffVal.textContent = '₱0.00';
+                diffVal.className = 'sval yellow';
+                diffHint.textContent = 'Perfectly allocated ✓';
+            }
+
+            document.getElementById('totalProgress').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = pct.toFixed(0) + '% used';
+        }
+
+        // ── Render category body in-place ──────────────────────────
+        function renderCatBody(catId) {
+            const cat = state.categories.find(c => c.id === catId);
+            const body = document.getElementById('catBody_' + catId);
+            if (!cat || !body) return;
+
+            const spent = catSpent(cat);
+            const rem = cat.budget - spent;
+            const pct = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
+            const depleted = isDepleted(cat);
+            const cls = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : '';
+
+            // header badges + amounts
+            const remEl = document.getElementById('catRem_' + catId);
+            if (remEl) {
+                remEl.textContent = fmt(rem);
+                remEl.className = 'cat-remaining' + (rem < 0 ? ' danger' : depleted ? ' zero' : rem < cat.budget * 0.2 ? ' warning' : '');
+            }
+            const spentEl = document.getElementById('catSpentLbl_' + catId);
+            if (spentEl) spentEl.textContent = fmt(spent) + ' spent';
+
+            const progEl = document.getElementById('catProg_' + catId);
+            if (progEl) { progEl.style.width = pct + '%'; progEl.className = 'cat-progress-fill ' + cls; }
+
+            const badgeEl = document.getElementById('catBadge_' + catId);
+            if (badgeEl) badgeEl.style.display = rem < 0 ? 'inline' : 'none';
+
+            const zeroBadge = document.getElementById('catZero_' + catId);
+            if (zeroBadge) zeroBadge.style.display = (depleted && rem >= 0) ? 'inline' : 'none';
+
+            const card = document.getElementById('catCard_' + catId);
+            if (card) card.classList.toggle('depleted', depleted);
+
+            // disable / enable inputs
+            ['expNote_', 'expAmt_', 'expDate_'].forEach(prefix => {
+                const el = document.getElementById(prefix + catId);
+                if (el) el.disabled = depleted;
+            });
+            const logBtn = document.getElementById('catLogBtn_' + catId);
+            if (logBtn) logBtn.disabled = depleted;
+
+            const noticeEl = document.getElementById('catNotice_' + catId);
+            if (noticeEl) noticeEl.style.display = depleted ? 'flex' : 'none';
+
+            // expense log
+            const logEl = document.getElementById('catLog_' + catId);
+            if (!logEl) return;
+            if (cat.expenses.length === 0) {
+                logEl.innerHTML = '<div class="no-expenses">No expenses yet</div>';
+                return;
+            }
+            logEl.innerHTML = cat.expenses.map(e => `
     <div class="expense-item">
       <div class="exp-main">
         <span class="exp-note" title="${e.note}">${e.note}</span>
         <span class="exp-date">📅 ${e.date}</span>
       </div>
       <span class="exp-amount">${fmt(e.amount)}</span>
-      <button class="btn-del-exp" onclick="deleteExpense('${catId}','${e.id}')" title="Delete">×</button>
-    </div>
-  `).join('');
-}
+      <button class="btn-del-exp" onclick="deleteExpense('${catId}','${e.id}')" title="Remove">×</button>
+    </div>`).join('');
+        }
 
-function render() {
-  renderBudgetCard();
-  const list = document.getElementById('categoriesList');
-  const empty = document.getElementById('emptyState');
+        // ── Full render ─────────────────────────────────────────────
+        function render() {
+            renderBudgetCard();
+            const list = document.getElementById('categoriesList');
+            const empty = document.getElementById('emptyState');
 
-  if (state.categories.length === 0) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
+            if (state.categories.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
 
-  list.innerHTML = state.categories.map(cat => {
-    const spent = catSpent(cat);
-    const rem   = cat.budget - spent;
-    const pct   = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
-    const cls   = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : '';
-    const remCls = rem < 0 ? ' danger' : rem < cat.budget * 0.2 ? ' warning' : '';
-    return `
-    <div class="cat-card" id="catCard_${cat.id}">
+            const todayVal = todayISO();
+
+            list.innerHTML = state.categories.map(cat => {
+                const spent = catSpent(cat);
+                const rem = cat.budget - spent;
+                const pct = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
+                const depleted = isDepleted(cat);
+                const cls = pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : '';
+                const remCls = rem < 0 ? ' danger' : depleted ? ' zero' : rem < cat.budget * 0.2 ? ' warning' : '';
+                const dis = depleted ? 'disabled' : '';
+
+                const expLog = cat.expenses.length === 0
+                    ? '<div class="no-expenses">No expenses yet</div>'
+                    : cat.expenses.map(e => `
+          <div class="expense-item">
+            <div class="exp-main">
+              <span class="exp-note" title="${e.note}">${e.note}</span>
+              <span class="exp-date">📅 ${e.date}</span>
+            </div>
+            <span class="exp-amount">${fmt(e.amount)}</span>
+            <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button>
+          </div>`).join('');
+
+                return `
+    <div class="cat-card${depleted ? ' depleted' : ''}" id="catCard_${cat.id}">
       <div class="cat-header" onclick="toggleCat('${cat.id}')">
         <div class="cat-info">
           <div class="cat-name">
             ${cat.name}
-            <span class="over-budget-badge" id="catBadge_${cat.id}" style="display:${rem<0?'inline':'none'}">Over!</span>
+            <span class="over-budget-badge" id="catBadge_${cat.id}" style="display:${rem < 0 ? 'inline' : 'none'}">Over!</span>
+            <span class="zero-badge"        id="catZero_${cat.id}"  style="display:${depleted && rem >= 0 ? 'inline' : 'none'}">Budget Used</span>
           </div>
           <div class="cat-budget-line">Budget: ${fmt(cat.budget)}</div>
         </div>
         <div class="cat-amounts">
           <div class="cat-remaining${remCls}" id="catRem_${cat.id}">${fmt(rem)}</div>
-          <div class="cat-spent-label" id="catSpentLbl_${cat.id}">${fmt(spent)} spent</div>
+          <div class="cat-spent-label"        id="catSpentLbl_${cat.id}">${fmt(spent)} spent</div>
         </div>
         <span class="chevron" id="chev_${cat.id}">▼</span>
       </div>
@@ -883,43 +1564,39 @@ function render() {
         <div class="cat-progress-fill ${cls}" id="catProg_${cat.id}" style="width:${pct}%"></div>
       </div>
       <div class="cat-body" id="catBody_${cat.id}">
+        <div class="depleted-notice" id="catNotice_${cat.id}" style="display:${depleted ? 'flex' : 'none'}">
+          ⚠️ Budget fully used — edit the category to add more budget before logging new expenses.
+        </div>
         <div class="expense-input-row">
-          <input type="text" id="expNote_${cat.id}" placeholder="Note (e.g. Electric bill)" maxlength="60">
-          <input type="number" id="expAmt_${cat.id}" placeholder="₱ Amount" min="0" step="0.01" style="max-width:110px;">
-          <input type="date" id="expDate_${cat.id}" style="max-width:140px;">
-          <button class="btn-log" onclick="logExpense('${cat.id}')">+ Log</button>
+          <input type="text"   id="expNote_${cat.id}"  placeholder="Note (e.g. Electric bill)" maxlength="60" ${dis}>
+          <input type="number" id="expAmt_${cat.id}"   placeholder="₱ Amount" min="0" step="0.01" style="max-width:110px;" ${dis}>
+          <input type="date"   id="expDate_${cat.id}"  value="${todayVal}" style="max-width:145px;" ${dis}>
+          <button class="btn-log" id="catLogBtn_${cat.id}" onclick="logExpense('${cat.id}')" ${dis}>+ Log</button>
         </div>
-        <div class="expense-log" id="catLog_${cat.id}">
-          ${cat.expenses.length === 0 ? '<div class="no-expenses">No expenses yet</div>' :
-            cat.expenses.map(e => `
-              <div class="expense-item">
-                <div class="exp-main">
-                  <span class="exp-note" title="${e.note}">${e.note}</span>
-                  <span class="exp-date">📅 ${e.date}</span>
-                </div>
-                <span class="exp-amount">${fmt(e.amount)}</span>
-                <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Delete">×</button>
-              </div>
-            `).join('')}
-        </div>
+        <div class="expense-log" id="catLog_${cat.id}">${expLog}</div>
         <div class="cat-actions">
           <button class="btn-edit-cat" onclick="openEdit('${cat.id}')">✎ Edit</button>
-          <button class="btn-del-cat" onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
+          <button class="btn-del-cat"  onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
         </div>
       </div>
     </div>`;
-  }).join('');
+            }).join('');
 
-  // Enter key on expense inputs
-  state.categories.forEach(cat => {
-    const amtEl = document.getElementById('expAmt_' + cat.id);
-    if (amtEl) amtEl.addEventListener('keydown', e => { if(e.key==='Enter') logExpense(cat.id); });
-  });
-}
+            // Enter key on amount inputs
+            state.categories.forEach(cat => {
+                const el = document.getElementById('expAmt_' + cat.id);
+                if (el) el.addEventListener('keydown', ev => { if (ev.key === 'Enter') logExpense(cat.id); });
+            });
+        }
 
-// ── Init ───────────────────────────────────────────────────
-load();
-render();
-</script>
+        // close modals on overlay click
+        document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReport(); });
+        document.getElementById('editModal').addEventListener('click', function (e) { if (e.target === this) closeEditModal(); });
+
+        // ── Init ───────────────────────────────────────────────────
+        load();
+        render();
+    </script>
 </body>
+
 </html>
