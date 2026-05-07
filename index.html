@@ -1011,6 +1011,23 @@
             transform: scale(1.2);
         }
 
+        .btn-edit-exp {
+            background: none;
+            border: none;
+            color: #c0a060;
+            cursor: pointer;
+            font-size: .95rem;
+            padding: 0;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: color var(--transition), transform var(--transition);
+        }
+
+        .btn-edit-exp:hover {
+            color: var(--gold-500);
+            transform: scale(1.2);
+        }
+
         .no-expenses {
             font-size: .78rem;
             color: #c0a060;
@@ -1754,6 +1771,30 @@
 
     <div class="toast" id="toast"></div>
 
+    <!-- Edit Expense Modal -->
+    <div class="modal-overlay" id="editExpModal">
+        <div class="modal">
+            <h3>Edit Expense</h3>
+            <label>Note</label>
+            <input type="text" id="editExpNote" maxlength="60">
+            <label>Amount (₱)</label>
+            <input type="number" id="editExpAmount" min="0" step="0.01">
+            <label>Type</label>
+            <div style="display:flex;gap:8px;margin-bottom:2px;">
+                <button type="button" id="editExpTypeSpent" class="log-type-btn active-spent"
+                    onclick="setEditExpType('spent')">💸 Spent</button>
+                <button type="button" id="editExpTypeLoan" class="log-type-btn" onclick="setEditExpType('loan')">💜
+                    Loan</button>
+            </div>
+            <label>Date</label>
+            <input type="date" id="editExpDate">
+            <div class="modal-actions">
+                <button class="btn-modal-cancel" onclick="closeEditExpModal()">Cancel</button>
+                <button class="btn-modal-save" onclick="saveEditExp()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ── STATE ──
         let state = { totalBudget: 0, categories: [] };
@@ -2159,8 +2200,9 @@
                             </div>
                             <span class="type-chip ${isLoan ? 'chip-loan' : 'chip-spent'}">${isLoan ? 'Loan' : 'Spent'}</span>
                             <span class="exp-amount${isLoan ? ' loan-amt' : ''}">${fmt(e.amount)}</span>
-                            <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button>
-                        </div>`;
+                            <button class="btn-edit-exp" onclick="editExpense('${cat.id}','${e.id}')" title="Edit">✎</button>
+                            <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button>                        
+                            </div>`;
                     }).join('');
 
                 return `
@@ -2231,9 +2273,69 @@
 
         document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReport(); });
         document.getElementById('editModal').addEventListener('click', function (e) { if (e.target === this) closeEditModal(); });
+        document.getElementById('editExpModal').addEventListener('click', function (e) { if (e.target === this) closeEditExpModal(); });
+
 
         load();
         render();
+
+        let editingExpCatId = null, editingExpId = null;
+
+        function editExpense(catId, expId) {
+            const cat = state.categories.find(c => c.id === catId);
+            if (!cat) return;
+            const exp = cat.expenses.find(e => e.id === expId);
+            if (!exp) return;
+            editingExpCatId = catId; editingExpId = expId;
+            document.getElementById('editExpNote').value = exp.note;
+            document.getElementById('editExpAmount').value = exp.amount;
+            document.getElementById('editExpDate').value = exp.dateRaw
+                ? exp.dateRaw
+                : exp.date
+                    ? (function () {
+                        const parts = exp.date.replace(',', '').split(' ');
+                        const m = String(MONTHS_SHORT.indexOf(parts[0]) + 1).padStart(2, '0');
+                        const d = String(parts[1]).padStart(2, '0');
+                        const y = parts[2];
+                        return `${y}-${m}-${d}`;
+                    })()
+                    : ''; setEditExpType(exp.type || 'spent');
+            document.getElementById('editExpModal').classList.add('open');
+        }
+        function closeEditExpModal() {
+            document.getElementById('editExpModal').classList.remove('open');
+            editingExpCatId = null; editingExpId = null;
+        }
+        function saveEditExp() {
+            const cat = state.categories.find(c => c.id === editingExpCatId);
+            if (!cat) return;
+            const exp = cat.expenses.find(e => e.id === editingExpId);
+            if (!exp) return;
+            const note = document.getElementById('editExpNote').value.trim();
+            const amount = parseFloat(document.getElementById('editExpAmount').value);
+            const dateISO = document.getElementById('editExpDate').value;
+            if (!note) { showToast('Add a note'); return; }
+            if (isNaN(amount) || amount <= 0) { showToast('Enter a valid amount'); return; }
+            if (!dateISO) { showToast('Pick a date'); return; }
+            const loanBtn = document.getElementById('editExpTypeLoan');
+            const type = loanBtn.dataset.selected === '1' ? 'loan' : 'spent';
+            exp.note = note; exp.amount = amount; exp.dateRaw = dateISO; exp.date = isoToLabel(dateISO); exp.type = type; save(); closeEditExpModal(); renderCatBody(editingExpCatId); renderBudgetCard();
+            showToast('Expense updated ✓');
+        }
+
+        function setEditExpType(type) {
+            const spentBtn = document.getElementById('editExpTypeSpent');
+            const loanBtn = document.getElementById('editExpTypeLoan');
+            if (type === 'spent') {
+                spentBtn.className = 'log-type-btn active-spent';
+                loanBtn.className = 'log-type-btn';
+            } else {
+                loanBtn.className = 'log-type-btn active-loan';
+                spentBtn.className = 'log-type-btn';
+            }
+            spentBtn.dataset.selected = type === 'spent' ? '1' : '';
+            loanBtn.dataset.selected = type === 'loan' ? '1' : '';
+        }
     </script>
 </body>
 
