@@ -171,6 +171,13 @@
             font-style: italic;
         }
 
+        .header-btns {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
         .btn-report {
             background: linear-gradient(135deg, rgba(245, 158, 11, .18), rgba(253, 230, 138, .1));
             border: 1px solid rgba(253, 230, 138, .35);
@@ -187,7 +194,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            flex-shrink: 0;
         }
 
         .btn-report:hover {
@@ -195,6 +201,31 @@
             border-color: rgba(253, 230, 138, .6);
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(180, 83, 9, .3);
+        }
+
+        .btn-logs {
+            background: linear-gradient(135deg, rgba(124, 58, 237, .22), rgba(167, 139, 250, .12));
+            border: 1px solid rgba(167, 139, 250, .4);
+            color: #c4b5fd;
+            border-radius: 30px;
+            padding: 8px 18px;
+            font-family: var(--font-body);
+            font-size: .8rem;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: .3px;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logs:hover {
+            background: linear-gradient(135deg, rgba(124, 58, 237, .35), rgba(167, 139, 250, .22));
+            border-color: rgba(167, 139, 250, .7);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, .3);
         }
 
         /* ── CONTAINER ── */
@@ -1297,7 +1328,6 @@
             color: var(--bark);
         }
 
-        /* month totals pill row */
         .report-month-totals {
             display: flex;
             align-items: center;
@@ -1343,7 +1373,6 @@
             display: block;
         }
 
-        /* summary row inside month */
         .report-summary-row {
             display: flex;
             gap: 8px;
@@ -1416,7 +1445,6 @@
             color: var(--bark);
         }
 
-        /* category section within report */
         .report-section-label {
             font-size: .62rem;
             font-weight: 600;
@@ -1579,6 +1607,284 @@
             letter-spacing: -.5px;
         }
 
+        /* ── LOGS MODAL ── */
+        .logs-modal {
+            background: white;
+            border-radius: var(--radius-card);
+            padding: 28px;
+            width: 100%;
+            max-width: 620px;
+            box-shadow: var(--shadow-deep);
+            max-height: 92vh;
+            overflow-y: auto;
+            animation: modalIn .35s cubic-bezier(.16, 1, .3, 1) both;
+        }
+
+        .logs-modal::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .logs-modal::-webkit-scrollbar-thumb {
+            background: #e8d5a0;
+            border-radius: 4px;
+        }
+
+        .logs-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0e4c0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logs-top h3 {
+            font-family: var(--font-display);
+            color: var(--bark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -.2px;
+        }
+
+        .logs-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logs-search {
+            border: 1.5px solid #e8d5a0;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-family: var(--font-body);
+            font-size: .78rem;
+            color: var(--bark);
+            outline: none;
+            background: var(--cream);
+            width: 160px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .logs-search:focus {
+            border-color: var(--gold-400);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, .1);
+        }
+
+        .logs-filter-btn {
+            border: 1.5px solid #e8d5a0;
+            border-radius: 30px;
+            padding: 6px 12px;
+            font-family: var(--font-body);
+            font-size: .74rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #a08040;
+            background: white;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .logs-filter-btn.active {
+            background: linear-gradient(135deg, var(--bark), var(--bark-light));
+            color: var(--gold-200);
+            border-color: var(--bark);
+        }
+
+        .logs-count {
+            font-size: .72rem;
+            color: #a08040;
+            font-weight: 500;
+            padding: 4px 10px;
+            background: #fef9ec;
+            border-radius: 20px;
+            border: 1px solid #f0e4c0;
+            white-space: nowrap;
+        }
+
+        /* logs table */
+        .logs-table-wrap {
+            overflow-x: auto;
+        }
+
+        .logs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        .logs-table thead tr {
+            background: linear-gradient(135deg, var(--bark), var(--bark-light));
+        }
+
+        .logs-table thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-size: .6rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(253, 230, 138, .7);
+            white-space: nowrap;
+        }
+
+        .logs-table thead th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .logs-table thead th:last-child {
+            border-radius: 0 10px 10px 0;
+            text-align: right;
+        }
+
+        .logs-table tbody tr {
+            border-bottom: 1px solid #f5ead0;
+            transition: background var(--transition);
+        }
+
+        .logs-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .logs-table tbody tr:hover {
+            background: #fffbf0;
+        }
+
+        .logs-table tbody tr.loan-row {
+            background: #fdfbff;
+        }
+
+        .logs-table tbody tr.loan-row:hover {
+            background: #f5f3ff;
+        }
+
+        .logs-table td {
+            padding: 10px 14px;
+            color: var(--bark);
+            vertical-align: middle;
+        }
+
+        .logs-table td:last-child {
+            text-align: right;
+        }
+
+        .log-cat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+            border: 1px solid var(--gold-200);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: .72rem;
+            font-weight: 600;
+            color: var(--bark);
+            white-space: nowrap;
+        }
+
+        .log-note-cell {
+            font-weight: 500;
+            max-width: 160px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .log-amount-cell {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: .9rem;
+            letter-spacing: -.2px;
+            white-space: nowrap;
+        }
+
+        .log-amount-cell.is-loan {
+            color: var(--loan-color);
+        }
+
+        .log-amount-cell.is-spent {
+            color: var(--bark);
+        }
+
+        .log-date-cell {
+            font-size: .74rem;
+            color: #a08040;
+            white-space: nowrap;
+        }
+
+        .log-type-cell {
+            white-space: nowrap;
+        }
+
+        .log-type-pill {
+            font-size: .56rem;
+            font-weight: 700;
+            letter-spacing: .6px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .pill-spent {
+            background: #fef3c7;
+            color: var(--gold-600);
+        }
+
+        .pill-loan {
+            background: #ede9fe;
+            color: var(--loan-color);
+        }
+
+        .logs-empty {
+            text-align: center;
+            padding: 48px 24px;
+            color: #a08040;
+        }
+
+        .logs-empty .orb {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 14px;
+        }
+
+        .logs-empty p {
+            font-size: .88rem;
+            line-height: 1.6;
+        }
+
+        .logs-grand-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--bark), var(--bark-light));
+            color: var(--gold-100);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-top: 16px;
+        }
+
+        .logs-grand-label {
+            font-size: .65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(253, 230, 138, .5);
+        }
+
+        .logs-grand-val {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--gold-100);
+        }
+
         /* ── EMPTY STATE ── */
         .empty-state {
             text-align: center;
@@ -1638,7 +1944,17 @@
             font-size: 1.2rem;
         }
 
-        @media (max-width:400px) {
+        @media (max-width:480px) {
+            .header-btns {
+                gap: 5px;
+            }
+
+            .btn-report,
+            .btn-logs {
+                padding: 7px 11px;
+                font-size: .72rem;
+            }
+
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -1653,6 +1969,14 @@
 
             .log-type-row {
                 gap: 5px;
+            }
+
+            .logs-search {
+                width: 120px;
+            }
+
+            .log-note-cell {
+                max-width: 100px;
             }
         }
     </style>
@@ -1669,7 +1993,10 @@
                     <span class="header-subtitle">Bank Budget Tracker</span>
                 </div>
             </div>
-            <button class="btn-report" onclick="openReport()">📊 Reports</button>
+            <div class="header-btns">
+                <button class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
+                <button class="btn-report" onclick="openReport()">📊 Reports</button>
+            </div>
         </div>
     </header>
 
@@ -1769,6 +2096,25 @@
         </div>
     </div>
 
+    <!-- Logs Modal -->
+    <div class="modal-overlay" id="logsModal">
+        <div class="logs-modal">
+            <div class="logs-top">
+                <h3>🗒️ All Logs</h3>
+                <div class="logs-controls">
+                    <input type="text" class="logs-search" id="logsSearch" placeholder="🔍 Search…"
+                        oninput="renderLogsTable()">
+                    <button class="logs-filter-btn active" id="filterAll" onclick="setLogsFilter('all')">All</button>
+                    <button class="logs-filter-btn" id="filterSpent" onclick="setLogsFilter('spent')">💸 Spent</button>
+                    <button class="logs-filter-btn" id="filterLoan" onclick="setLogsFilter('loan')">💜 Loan</button>
+                    <span class="logs-count" id="logsCount">0 entries</span>
+                    <button class="btn-close-report" onclick="closeLogs()">✕ Close</button>
+                </div>
+            </div>
+            <div class="logs-table-wrap" id="logsTableWrap"></div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <!-- Edit Expense Modal -->
@@ -1821,12 +2167,41 @@
         function isoToLabel(iso) { const [y, m, d] = iso.split('-'); return `${MONTHS_SHORT[parseInt(m) - 1]} ${parseInt(d)}, ${y}`; }
         function isoToMonthKey(iso) { return iso ? iso.slice(0, 7) : '0000-00'; }
 
+        // ── FORMAT DATE AS mm/dd/yy + time ──
+        function fmtLogDate(e) {
+            if (e.dateRaw) {
+                const [y, m, d] = e.dateRaw.split('-');
+                return `${m}/${d}/${y.slice(2)}`;
+            }
+            // fallback from display date string
+            if (e.date) {
+                const parts = e.date.replace(',', '').split(' ');
+                const mi = MONTHS_SHORT.indexOf(parts[0]);
+                if (mi >= 0) {
+                    const m = String(mi + 1).padStart(2, '0');
+                    const d = String(parts[1]).padStart(2, '0');
+                    const y = parts[2] ? parts[2].slice(2) : '??';
+                    return `${m}/${d}/${y}`;
+                }
+            }
+            return '—';
+        }
+
+        function fmtLogTime(e) {
+            if (e.loggedAt) {
+                const d = new Date(e.loggedAt);
+                let h = d.getHours(), min = d.getMinutes();
+                const ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+                return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')} ${ampm}`;
+            }
+            return null;
+        }
+
         // ── DERIVED ──
-        // type: 'spent' | 'loan'  (legacy entries with no type default to 'spent')
         function expType(e) { return e.type || 'spent'; }
         function catSpentOnly(cat) { return cat.expenses.filter(e => expType(e) === 'spent').reduce((s, e) => s + Number(e.amount), 0); }
         function catLoanOnly(cat) { return cat.expenses.filter(e => expType(e) === 'loan').reduce((s, e) => s + Number(e.amount), 0); }
-        // ALL expenses (spent + loan) count against budget and Maribank — loan is just a label
         function catSpent(cat) { return cat.expenses.reduce((s, e) => s + Number(e.amount), 0); }
         function totalSpentAll() { return state.categories.reduce((s, c) => s + catSpent(c), 0); }
         function catTotalRem() { return state.categories.reduce((s, c) => s + Math.max(0, c.budget - catSpent(c)), 0); }
@@ -1905,7 +2280,7 @@
 
             const cat = state.categories.find(c => c.id === catId);
             if (!cat) return;
-            cat.expenses.unshift({ id: uid(), note, amount, type, date: isoToLabel(dateISO), dateRaw: dateISO });
+            cat.expenses.unshift({ id: uid(), note, amount, type, date: isoToLabel(dateISO), dateRaw: dateISO, loggedAt: Date.now() });
             save(); noteEl.value = ''; amtEl.value = '';
             renderCatBody(catId); renderBudgetCard();
             showToast(type === 'loan' ? 'Loan recorded 💜' : 'Expense logged ✓');
@@ -1951,6 +2326,104 @@
             if (body) { body.classList.toggle('open'); if (chev) chev.classList.toggle('up'); }
         }
 
+        // ── LOGS MODAL ──
+        let logsFilter = 'all';
+        const CAT_ICONS = ['🛒', '🏠', '🚗', '💊', '🍽️', '💡', '📚', '✈️', '👔', '🎉', '🌿', '💰'];
+
+        function getCatIcon(cat) {
+            const idx = state.categories.indexOf(cat);
+            return CAT_ICONS[idx % CAT_ICONS.length];
+        }
+
+        function openLogs() {
+            document.getElementById('logsModal').classList.add('open');
+            document.getElementById('logsSearch').value = '';
+            logsFilter = 'all';
+            ['filterAll', 'filterSpent', 'filterLoan'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById('filterAll').classList.add('active');
+            renderLogsTable();
+        }
+        function closeLogs() { document.getElementById('logsModal').classList.remove('open'); }
+
+        function setLogsFilter(f) {
+            logsFilter = f;
+            ['filterAll', 'filterSpent', 'filterLoan'].forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(f === 'all' ? 'filterAll' : f === 'spent' ? 'filterSpent' : 'filterLoan').classList.add('active');
+            renderLogsTable();
+        }
+
+        function renderLogsTable() {
+            const wrap = document.getElementById('logsTableWrap');
+            const search = (document.getElementById('logsSearch').value || '').toLowerCase();
+
+            // collect all logs sorted by most recent (by loggedAt then dateRaw)
+            let allLogs = [];
+            state.categories.forEach((cat, ci) => {
+                cat.expenses.forEach(e => {
+                    allLogs.push({ ...e, type: expType(e), catName: cat.name, catIcon: CAT_ICONS[ci % CAT_ICONS.length] });
+                });
+            });
+
+            // sort: loggedAt desc, then dateRaw desc
+            allLogs.sort((a, b) => {
+                if (a.loggedAt && b.loggedAt) return b.loggedAt - a.loggedAt;
+                if (a.loggedAt) return -1;
+                if (b.loggedAt) return 1;
+                return (b.dateRaw || '').localeCompare(a.dateRaw || '');
+            });
+
+            // filter by type
+            if (logsFilter !== 'all') allLogs = allLogs.filter(e => e.type === logsFilter);
+
+            // filter by search
+            if (search) allLogs = allLogs.filter(e =>
+                e.note.toLowerCase().includes(search) ||
+                e.catName.toLowerCase().includes(search) ||
+                fmt(e.amount).includes(search)
+            );
+
+            document.getElementById('logsCount').textContent = `${allLogs.length} entr${allLogs.length === 1 ? 'y' : 'ies'}`;
+
+            if (allLogs.length === 0) {
+                wrap.innerHTML = `<div class="logs-empty"><div class="orb">🌱</div><p>No logs found.</p></div>`;
+                return;
+            }
+
+            const grandTotal = allLogs.reduce((s, e) => s + Number(e.amount), 0);
+
+            const rows = allLogs.map(e => {
+                const isLoan = e.type === 'loan';
+                const dateStr = fmtLogDate(e);
+                const timeStr = fmtLogTime(e);
+                const dateTimeStr = timeStr ? `${dateStr}<br><span style="font-size:.65rem;color:#c0a0a0;">${timeStr}</span>` : dateStr;
+                return `<tr class="${isLoan ? 'loan-row' : ''}">
+                    <td><span class="log-cat-badge">${e.catIcon} ${e.catName}</span></td>
+                    <td class="log-note-cell" title="${e.note}">${e.note}</td>
+                    <td class="log-type-cell"><span class="log-type-pill ${isLoan ? 'pill-loan' : 'pill-spent'}">${isLoan ? 'Loan' : 'Spent'}</span></td>
+                    <td class="log-amount-cell ${isLoan ? 'is-loan' : 'is-spent'}">${fmt(e.amount)}</td>
+                    <td class="log-date-cell">${dateTimeStr}</td>
+                </tr>`;
+            }).join('');
+
+            wrap.innerHTML = `
+                <table class="logs-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Note</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date / Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                <div class="logs-grand-row">
+                    <span class="logs-grand-label">Total Showing</span>
+                    <span class="logs-grand-val">${fmt(grandTotal)}</span>
+                </div>`;
+        }
+
         // ── REPORT ──
         function openReport() { buildReport(); document.getElementById('reportModal').classList.add('open'); }
         function closeReport() { document.getElementById('reportModal').classList.remove('open'); }
@@ -1965,14 +2438,11 @@
 
         function buildReport() {
             const body = document.getElementById('reportBody');
-
-            // gather all expenses with catName
             const allExp = [];
             state.categories.forEach(cat => cat.expenses.forEach(e => allExp.push({ ...e, type: expType(e), catName: cat.name })));
 
             if (allExp.length === 0) { body.innerHTML = '<div class="report-empty">🌱 No expenses logged yet.</div>'; return; }
 
-            // group by month
             const monthMap = {};
             allExp.forEach(e => {
                 const key = e.dateRaw ? isoToMonthKey(e.dateRaw) : parseFallbackKey(e.date);
@@ -1995,7 +2465,6 @@
                 const monthSpent = exps.filter(e => e.type === 'spent').reduce((s, e) => s + Number(e.amount), 0);
                 const monthLoan = exps.filter(e => e.type === 'loan').reduce((s, e) => s + Number(e.amount), 0);
 
-                // group by category — all entries together, color-coded per type
                 const catMap = {};
                 exps.forEach(e => { if (!catMap[e.catName]) catMap[e.catName] = []; catMap[e.catName].push(e); });
 
@@ -2018,10 +2487,6 @@
                         <div class="report-exp-list">${expItems}</div>`;
                 }).join('');
 
-                const spentSection = '';
-                const loanSection = '';
-
-                // summary boxes
                 const summaryRow = `
                     <div class="report-summary-row">
                         <div class="summary-box spent-box">
@@ -2031,18 +2496,14 @@
                         ${monthLoan > 0 ? `<div class="summary-box loan-box">
                             <span class="summary-box-label">💜 Total Loan</span>
                             <span class="summary-box-value">${fmt(monthLoan)}</span>
-                        </div>`: ''}
+                        </div>` : ''}
                         <div class="summary-box total-box">
                             <span class="summary-box-label">📊 Grand Total</span>
                             <span class="summary-box-value">${fmt(monthTotal)}</span>
                         </div>
                     </div>`;
 
-                // header chip — single combined total
-                const chips = `
-                    <div class="report-month-totals">
-                        <span class="report-total-chip chip-spent-total">${fmt(monthTotal)}</span>
-                    </div>`;
+                const chips = `<div class="report-month-totals"><span class="report-total-chip chip-spent-total">${fmt(monthTotal)}</span></div>`;
 
                 html += `
                     <div class="report-month">
@@ -2057,7 +2518,6 @@
                     </div>`;
             });
 
-            // grand total row
             html += `
                 <div class="report-grand">
                     <span class="report-grand-label">Grand Total All Expenses</span>
@@ -2119,7 +2579,7 @@
             document.getElementById('progressPct').textContent = pct.toFixed(0) + '% used';
         }
 
-        // ── RENDER CAT BODY (in-place) ──
+        // ── RENDER CAT BODY ──
         function renderCatBody(catId) {
             const cat = state.categories.find(c => c.id === catId);
             const body = document.getElementById('catBody_' + catId);
@@ -2154,8 +2614,7 @@
             if (!logEl) return;
             if (cat.expenses.length === 0) { logEl.innerHTML = '<div class="no-expenses">No expenses recorded yet</div>'; return; }
             logEl.innerHTML = cat.expenses.map(e => {
-                const t = expType(e);
-                const isLoan = t === 'loan';
+                const t = expType(e); const isLoan = t === 'loan';
                 return `<div class="expense-item${isLoan ? ' loan-item' : ''}">
                     <div class="exp-main">
                         <span class="exp-note" title="${e.note}">${e.note}</span>
@@ -2169,8 +2628,6 @@
         }
 
         // ── FULL RENDER ──
-        const CAT_ICONS = ['🛒', '🏠', '🚗', '💊', '🍽️', '💡', '📚', '✈️', '👔', '🎉', '🌿', '💰'];
-
         function render() {
             renderBudgetCard();
             const list = document.getElementById('categoriesList');
@@ -2201,8 +2658,8 @@
                             <span class="type-chip ${isLoan ? 'chip-loan' : 'chip-spent'}">${isLoan ? 'Loan' : 'Spent'}</span>
                             <span class="exp-amount${isLoan ? ' loan-amt' : ''}">${fmt(e.amount)}</span>
                             <button class="btn-edit-exp" onclick="editExpense('${cat.id}','${e.id}')" title="Edit">✎</button>
-                            <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button>                        
-                            </div>`;
+                            <button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button>
+                        </div>`;
                     }).join('');
 
                 return `
@@ -2213,13 +2670,13 @@
                             <div class="cat-name">
                                 ${cat.name}
                                 <span class="badge-over" id="catBadge_${cat.id}" style="display:${rem < 0 ? 'inline' : 'none'}">Over!</span>
-                                <span class="badge-zero" id="catZero_${cat.id}"  style="display:${depleted && rem >= 0 ? 'inline' : 'none'}">Depleted</span>
+                                <span class="badge-zero" id="catZero_${cat.id}" style="display:${depleted && rem >= 0 ? 'inline' : 'none'}">Depleted</span>
                             </div>
                             <div class="cat-sub">Budget: ${fmt(cat.budget)}</div>
                         </div>
                         <div class="cat-amounts">
                             <span class="cat-remaining${remCls}" id="catRem_${cat.id}">${fmt(rem)}</span>
-                            <span class="cat-spent-sub"          id="catSpentSub_${cat.id}">${fmt(spent)} spent</span>
+                            <span class="cat-spent-sub" id="catSpentSub_${cat.id}">${fmt(spent)} spent</span>
                         </div>
                         <span class="chevron" id="chev_${cat.id}">▼</span>
                     </div>
@@ -2232,34 +2689,25 @@
                         <div class="depleted-notice" id="catNotice_${cat.id}" style="display:${depleted ? 'flex' : 'none'}">
                             ⚠️ Budget fully used — edit the category to increase your budget.
                         </div>
-
-                        <!-- Log type toggle -->
                         <div class="log-type-row">
                             <button class="log-type-btn active-spent"
                                 data-type-group="${cat.id}" data-type="spent"
                                 data-active-type="${cat.id}"
-                                onclick="setLogType('${cat.id}','spent',this)">
-                                💸 Spent
-                            </button>
+                                onclick="setLogType('${cat.id}','spent',this)">💸 Spent</button>
                             <button class="log-type-btn"
                                 data-type-group="${cat.id}" data-type="loan"
-                                onclick="setLogType('${cat.id}','loan',this)">
-                                💜 Loan
-                            </button>
+                                onclick="setLogType('${cat.id}','loan',this)">💜 Loan</button>
                         </div>
-
-                        <!-- Inputs -->
                         <div class="exp-input-row">
-                            <input type="text"   id="expNote_${cat.id}"  placeholder="Note (e.g. Electric bill)" maxlength="60" ${dis}>
-                            <input type="number" id="expAmt_${cat.id}"   placeholder="₱ Amount" min="0" step="0.01" style="max-width:115px;" ${dis}>
-                            <input type="date"   id="expDate_${cat.id}"  value="${todayVal}" style="max-width:150px;" ${dis}>
+                            <input type="text"   id="expNote_${cat.id}" placeholder="Note (e.g. Electric bill)" maxlength="60" ${dis}>
+                            <input type="number" id="expAmt_${cat.id}"  placeholder="₱ Amount" min="0" step="0.01" style="max-width:115px;" ${dis}>
+                            <input type="date"   id="expDate_${cat.id}" value="${todayVal}" style="max-width:150px;" ${dis}>
                             <button class="btn-log" id="catLogBtn_${cat.id}" onclick="logExpense('${cat.id}')" ${dis}>+ Log</button>
                         </div>
-
                         <div class="expense-log" id="catLog_${cat.id}">${expLog}</div>
                         <div class="cat-actions">
                             <button class="btn-edit-cat" onclick="openEdit('${cat.id}')">✎ Edit</button>
-                            <button class="btn-del-cat"  onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
+                            <button class="btn-del-cat" onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
                         </div>
                     </div>
                 </div>`;
@@ -2274,7 +2722,7 @@
         document.getElementById('reportModal').addEventListener('click', function (e) { if (e.target === this) closeReport(); });
         document.getElementById('editModal').addEventListener('click', function (e) { if (e.target === this) closeEditModal(); });
         document.getElementById('editExpModal').addEventListener('click', function (e) { if (e.target === this) closeEditExpModal(); });
-
+        document.getElementById('logsModal').addEventListener('click', function (e) { if (e.target === this) closeLogs(); });
 
         load();
         render();
@@ -2299,7 +2747,8 @@
                         const y = parts[2];
                         return `${y}-${m}-${d}`;
                     })()
-                    : ''; setEditExpType(exp.type || 'spent');
+                    : '';
+            setEditExpType(exp.type || 'spent');
             document.getElementById('editExpModal').classList.add('open');
         }
         function closeEditExpModal() {
@@ -2319,7 +2768,8 @@
             if (!dateISO) { showToast('Pick a date'); return; }
             const loanBtn = document.getElementById('editExpTypeLoan');
             const type = loanBtn.dataset.selected === '1' ? 'loan' : 'spent';
-            exp.note = note; exp.amount = amount; exp.dateRaw = dateISO; exp.date = isoToLabel(dateISO); exp.type = type; save(); closeEditExpModal(); renderCatBody(editingExpCatId); renderBudgetCard();
+            exp.note = note; exp.amount = amount; exp.dateRaw = dateISO; exp.date = isoToLabel(dateISO); exp.type = type;
+            save(); closeEditExpModal(); renderCatBody(editingExpCatId); renderBudgetCard();
             showToast('Expense updated ✓');
         }
 
