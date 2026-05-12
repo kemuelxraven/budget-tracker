@@ -179,9 +179,9 @@
         }
 
         .btn-report {
-            background: linear-gradient(135deg, rgba(245, 158, 11, .18), rgba(253, 230, 138, .1));
-            border: 1px solid rgba(253, 230, 138, .35);
-            color: var(--gold-200);
+            background: linear-gradient(135deg, rgba(245, 158, 11, .45), rgba(253, 230, 138, .3));
+            border: 1.5px solid rgba(253, 230, 138, .7);
+            color: #000000;
             border-radius: 30px;
             padding: 8px 18px;
             font-family: var(--font-body);
@@ -204,9 +204,9 @@
         }
 
         .btn-logs {
-            background: linear-gradient(135deg, rgba(124, 58, 237, .22), rgba(167, 139, 250, .12));
-            border: 1px solid rgba(167, 139, 250, .4);
-            color: #c4b5fd;
+            background: linear-gradient(135deg, rgba(124, 58, 237, .45), rgba(167, 139, 250, .3));
+            border: 1.5px solid rgba(167, 139, 250, .75);
+            color: #000000;
             border-radius: 30px;
             padding: 8px 18px;
             font-family: var(--font-body);
@@ -521,6 +521,7 @@
             justify-content: space-between;
             margin-bottom: 18px;
             gap: 12px;
+            margin-top: 20px;
         }
 
         .section-title {
@@ -2311,9 +2312,9 @@
         }
 
         .btn-data-menu {
-            background: linear-gradient(135deg, rgba(245, 158, 11, .18), rgba(253, 230, 138, .1));
-            border: 1px solid rgba(253, 230, 138, .35);
-            color: var(--gold-200);
+            background: linear-gradient(135deg, rgba(245, 158, 11, .45), rgba(253, 230, 138, .3));
+            border: 1.5px solid rgba(253, 230, 138, .7);
+            color: #000000;
             border-radius: 30px;
             padding: 8px 16px;
             font-family: var(--font-body);
@@ -2401,19 +2402,6 @@
                     <span class="header-subtitle">Bank Budget Tracker</span>
                 </div>
             </div>
-            <div class="header-btns">
-                <div class="dropdown-wrap" id="dataDropdown">
-                    <button class="btn-data-menu" onclick="toggleDataMenu()">🗂️ Data ▾</button>
-                    <div class="data-menu" id="dataMenu">
-                        <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup &
-                            Restore</button>
-                        <button class="data-menu-item danger-item" onclick="resetAll();closeDataMenu()">🗑️ Reset
-                            Everything</button>
-                    </div>
-                </div>
-                <button class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
-                <button class="btn-report" onclick="openReport()">📊 Reports</button>
-            </div>
         </div>
     </header>
 
@@ -2460,6 +2448,21 @@
                     <span class="progress-label" id="progressPct">0% used</span>
                 </div>
             </div>
+        </div>
+
+        <div class="header-btns"
+            style="display:flex;justify-content:center;gap:10px;margin:20px auto 0;max-width:680px;padding:0 20px;">
+            <div class="dropdown-wrap" id="dataDropdown">
+                <button class="btn-data-menu" onclick="toggleDataMenu()">🗂️ Data ▾</button>
+                <div class="data-menu" id="dataMenu">
+                    <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup &
+                        Restore</button>
+                    <button class="data-menu-item danger-item" onclick="resetAll();closeDataMenu()">🗑️ Reset
+                        Everything</button>
+                </div>
+            </div>
+            <button class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
+            <button class="btn-report" onclick="openReport()">📊 Reports</button>
         </div>
 
         <div class="section-header">
