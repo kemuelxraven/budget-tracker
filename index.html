@@ -2304,6 +2304,89 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 16px rgba(220, 38, 38, .3);
         }
+
+        .dropdown-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .btn-data-menu {
+            background: linear-gradient(135deg, rgba(245, 158, 11, .18), rgba(253, 230, 138, .1));
+            border: 1px solid rgba(253, 230, 138, .35);
+            color: var(--gold-200);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-family: var(--font-body);
+            font-size: .8rem;
+            font-weight: 500;
+            cursor: pointer;
+            letter-spacing: .3px;
+            transition: var(--transition);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-data-menu:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, .3), rgba(253, 230, 138, .2));
+            border-color: rgba(253, 230, 138, .6);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(180, 83, 9, .3);
+        }
+
+        .data-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: white;
+            border: 1.5px solid #f0e4c0;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(61, 32, 7, .18);
+            overflow: hidden;
+            min-width: 190px;
+            z-index: 300;
+            animation: formOpen .2s cubic-bezier(.4, 0, .2, 1) both;
+        }
+
+        .data-menu.open {
+            display: block;
+        }
+
+        .data-menu-item {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 12px 18px;
+            font-family: var(--font-body);
+            font-size: .85rem;
+            font-weight: 500;
+            color: var(--bark);
+            cursor: pointer;
+            text-align: left;
+            transition: background var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-bottom: 1px solid #f5ead0;
+        }
+
+        .data-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .data-menu-item:hover {
+            background: #fff9ec;
+        }
+
+        .data-menu-item.danger-item {
+            color: #991b1b;
+        }
+
+        .data-menu-item.danger-item:hover {
+            background: #fff1f2;
+        }
     </style>
 </head>
 
@@ -2319,9 +2402,16 @@
                 </div>
             </div>
             <div class="header-btns">
-                <button class="btn-backup" onclick="openBackup()" title="Backup & Restore">💾</button>
-                <button class="btn-reset" onclick="resetAll()" title="Reset Everything">🗑️</button> <button
-                    class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
+                <div class="dropdown-wrap" id="dataDropdown">
+                    <button class="btn-data-menu" onclick="toggleDataMenu()">🗂️ Data ▾</button>
+                    <div class="data-menu" id="dataMenu">
+                        <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup &
+                            Restore</button>
+                        <button class="data-menu-item danger-item" onclick="resetAll();closeDataMenu()">🗑️ Reset
+                            Everything</button>
+                    </div>
+                </div>
+                <button class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
                 <button class="btn-report" onclick="openReport()">📊 Reports</button>
             </div>
         </div>
@@ -3342,6 +3432,19 @@
             render();
             showToast('All data cleared 🗑️');
         }
+
+        function toggleDataMenu() {
+            document.getElementById('dataMenu').classList.toggle('open');
+        }
+
+        function closeDataMenu() {
+            document.getElementById('dataMenu').classList.remove('open');
+        }
+
+        document.addEventListener('click', function (e) {
+            const wrap = document.getElementById('dataDropdown');
+            if (wrap && !wrap.contains(e.target)) closeDataMenu();
+        });
     </script>
 </body>
 
