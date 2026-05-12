@@ -2281,6 +2281,29 @@
                 padding: 20px 12px;
             }
         }
+
+        .btn-reset {
+            background: linear-gradient(135deg, rgba(220, 38, 38, .18), rgba(220, 38, 38, .1));
+            border: 1px solid rgba(220, 38, 38, .4);
+            color: #fca5a5;
+            border-radius: 30px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, rgba(220, 38, 38, .35), rgba(220, 38, 38, .22));
+            border-color: rgba(220, 38, 38, .7);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(220, 38, 38, .3);
+        }
     </style>
 </head>
 
@@ -2297,7 +2320,8 @@
             </div>
             <div class="header-btns">
                 <button class="btn-backup" onclick="openBackup()" title="Backup & Restore">💾</button>
-                <button class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
+                <button class="btn-reset" onclick="resetAll()" title="Reset Everything">🗑️</button> <button
+                    class="btn-logs" onclick="openLogs()">🗒️ Logs</button>
                 <button class="btn-report" onclick="openReport()">📊 Reports</button>
             </div>
         </div>
@@ -2429,7 +2453,8 @@
             <div class="backup-section">
                 <div class="backup-section-title">📤 Export Data</div>
                 <p class="backup-section-desc">Download all your budget categories, expenses, and settings as a
-                    <strong>.json</strong> file. Save it anywhere — your phone, Google Drive, email to yourself.</p>
+                    <strong>.json</strong> file. Save it anywhere — your phone, Google Drive, email to yourself.
+                </p>
                 <button class="btn-export" onclick="exportData()">⬇️ Download Backup File</button>
                 <div class="backup-meta" id="exportMeta"></div>
             </div>
@@ -2438,20 +2463,24 @@
                 <div class="backup-section-title">📥 Import / Restore</div>
                 <p class="backup-section-desc">Select a previously exported <strong>.json</strong> backup file to
                     restore your data.</p>
-                <label class="import-drop-zone" id="importDropZone" ondragover="handleDragOver(event)"
+                <div class="import-drop-zone" id="importDropZone" ondragover="handleDragOver(event)"
                     ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)"
                     onclick="document.getElementById('importFileInput').click()">
                     <span class="drop-icon">📂</span>
                     <strong>Tap to choose file</strong>
                     <span class="drop-hint">Only Maribank .json backup files</span>
-                    <input type="file" id="importFileInput" accept=".json" onchange="handleFileSelect(event)">
-                </label>
+                    <input type="file" id="importFileInput" accept=".json" onchange="handleFileSelect(event)"
+                        style="display:none;">
+                </div>
                 <div class="import-warning" id="importWarning">
                     ⚠️ <strong>This will replace all your current data</strong> with the backup. Make sure to export
                     first if you want to keep your current records!
                 </div>
-                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore from this
-                    backup</button>
+                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore (Replace
+                    all)</button>
+                <button class="btn-confirm-import" id="btnMergeImport" onclick="mergeImport()"
+                    style="background:linear-gradient(135deg,#7c3aed,#6d28d9);margin-top:6px;">➕ Merge into
+                    existing</button>
             </div>
 
             <div class="backup-close-row">
@@ -3200,6 +3229,7 @@
                     document.getElementById('importWarning').innerHTML = `⚠️ <strong>This will replace all your current data.</strong> The backup from <strong>${exportedAt}</strong> contains ${cats} categor${cats === 1 ? 'y' : 'ies'} and ${exps} expense${exps === 1 ? '' : 's'}. Export your current data first if needed!`;
                     document.getElementById('importWarning').classList.add('show');
                     document.getElementById('btnConfirmImport').classList.add('show');
+                    document.getElementById('btnMergeImport').classList.add('show');
                 } catch (err) {
                     showToast('Could not read file — is it corrupted?');
                 }
@@ -3215,6 +3245,31 @@
             closeBackup();
             render();
             showToast('Data restored successfully 🌻');
+        }
+
+        function mergeImport() {
+            if (!pendingImportData) return;
+            const { _maribank_backup, _version, _exportedAt, ...incoming } = pendingImportData;
+
+            // Add totalBudget
+            state.totalBudget = (Number(state.totalBudget) || 0) + (Number(incoming.totalBudget) || 0);
+
+            // Merge categories — match by name, else append
+            (incoming.categories || []).forEach(inCat => {
+                const existing = state.categories.find(c => c.name.toLowerCase() === inCat.name.toLowerCase());
+                if (existing) {
+                    // Avoid duplicate expenses by id
+                    const existingIds = new Set(existing.expenses.map(e => e.id));
+                    inCat.expenses.forEach(e => { if (!existingIds.has(e.id)) existing.expenses.push(e); });
+                } else {
+                    state.categories.push({ ...inCat, id: uid() });
+                }
+            });
+
+            save();
+            closeBackup();
+            render();
+            showToast('Data merged successfully 🌻');
         }
 
         load();
@@ -3278,6 +3333,14 @@
             }
             spentBtn.dataset.selected = type === 'spent' ? '1' : '';
             loanBtn.dataset.selected = type === 'loan' ? '1' : '';
+        }
+
+        function resetAll() {
+            if (!confirm('Reset everything? This will delete all categories, expenses, and your total budget. This cannot be undone.')) return;
+            state = { totalBudget: 0, categories: [] };
+            save();
+            render();
+            showToast('All data cleared 🗑️');
         }
     </script>
 </body>
