@@ -2631,7 +2631,18 @@
         <div class="budget-card">
             <div class="budget-card-deco"></div>
             <div class="budget-card-sun">🌻</div>
-            <div class="budget-eyebrow">Total Budget · Maribank</div>
+            <div class="budget-eyebrow">Total Budget · Maribank
+                <button id="eyeBtn" onclick="toggleVisibility()"
+                    style="background:none;border:none;cursor:pointer;margin-left:6px;opacity:0.6;transition:opacity 0.2s;display:flex;align-items:center;"
+                    title="Toggle visibility">
+                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="none" stroke="rgba(253,230,138,0.7)" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                </button>
+            </div>
             <div class="budget-amount-row">
                 <div class="budget-amount" id="budgetDisplay" onclick="editBudget()">₱0.00</div>
                 <div class="budget-edit-wrap" id="budgetEditWrap">
@@ -2675,7 +2686,8 @@
             <div class="dropdown-wrap" id="dataDropdown">
                 <button class="btn-data-menu" onclick="toggleDataMenu()">🗂️ Data ▾</button>
                 <div class="data-menu" id="dataMenu">
-                    <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup & Restore</button>
+                    <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup &
+                        Restore</button>
                     <button class="data-menu-item danger-item" onclick="resetAll();closeDataMenu()">🗑️ Reset
                         Everything</button>
                 </div>
@@ -2744,7 +2756,8 @@
                     <input type="text" class="logs-search" id="logsSearch" placeholder="🔍 Search…"
                         oninput="renderLogsTable()">
                     <button class="logs-filter-btn active" id="filterAll" onclick="setLogsFilter('all')">All</button>
-                    <button class="logs-filter-btn" id="filterSpent" onclick="setLogsFilter('spent')">💸 Spent</button>
+                    <button class="logs-filter-btn" id="filterSpent" onclick="setLogsFilter('spent')">💸
+                        Spent</button>
                     <button class="logs-filter-btn" id="filterLoan" onclick="setLogsFilter('loan')">💜 Loan</button>
                     <span class="logs-count" id="logsCount">0 entries</span>
                     <button class="btn-close-report" onclick="closeLogs()">✕ Close</button>
@@ -2759,12 +2772,14 @@
     <div class="modal-overlay" id="backupModal">
         <div class="backup-modal">
             <h3>💾 Backup & Restore</h3>
-            <p class="backup-subtitle">Export your data to a file to keep it safe, or import a previously saved backup
+            <p class="backup-subtitle">Export your data to a file to keep it safe, or import a previously saved
+                backup
                 to restore your records.</p>
             <div class="backup-section">
                 <div class="backup-section-title">📤 Export Data</div>
                 <p class="backup-section-desc">Download all your budget categories, expenses, and settings as a
-                    <strong>.json</strong> file.</p>
+                    <strong>.json</strong> file.
+                </p>
                 <button class="btn-export" onclick="exportData()">⬇️ Download Backup File</button>
                 <div class="backup-meta" id="exportMeta"></div>
             </div>
@@ -2782,7 +2797,8 @@
                         style="display:none;">
                 </div>
                 <div class="import-warning" id="importWarning"></div>
-                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore (Replace
+                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore
+                    (Replace
                     all)</button>
                 <button class="btn-confirm-import" id="btnMergeImport" onclick="mergeImport()"
                     style="background:linear-gradient(135deg,#7c3aed,#6d28d9);margin-top:6px;">➕ Merge into
@@ -3053,16 +3069,17 @@
         function renderBudgetCard() {
             const spent = totalSpentAll(); const maribankRem = state.totalBudget - spent; const catRem = catTotalRem();
             const diff = maribankRem - catRem; const pct = state.totalBudget > 0 ? Math.min((spent / state.totalBudget) * 100, 100) : 0;
-            document.getElementById('budgetDisplay').textContent = fmt(state.totalBudget);
-            document.getElementById('totalSpent').textContent = fmt(spent);
-            const remEl = document.getElementById('totalRemaining'); remEl.textContent = fmt(maribankRem); remEl.className = 'stat-value ' + (maribankRem < 0 ? 'red' : 'green');
-            document.getElementById('catTotalRemaining').textContent = fmt(catRem);
+            document.getElementById('budgetDisplay').textContent = valuesHidden ? '₱••••••' : fmt(state.totalBudget);
+            document.getElementById('totalSpent').textContent = valuesHidden ? '₱••••••' : fmt(spent);
+            const remEl = document.getElementById('totalRemaining'); remEl.textContent = valuesHidden ? '₱••••••' : fmt(maribankRem);
+            remEl.className = 'stat-value ' + (maribankRem < 0 ? 'red' : 'green');
+            document.getElementById('catTotalRemaining').textContent = valuesHidden ? '₱••••••' : fmt(catRem);
             const diffPill = document.getElementById('diffPill'); const diffLbl = document.getElementById('diffLabel');
             const diffVal = document.getElementById('diffVal'); const diffHint = document.getElementById('diffHint');
             diffPill.className = 'stat-pill';
-            if (diff > 0.005) { diffLbl.textContent = 'Excess'; diffVal.textContent = fmt(diff); diffVal.className = 'stat-value green'; diffHint.textContent = 'Maribank has more than categories need'; diffPill.classList.add('green-tint') }
-            else if (diff < -0.005) { diffLbl.textContent = 'Short Budget'; diffVal.textContent = fmt(Math.abs(diff)); diffVal.className = 'stat-value red'; diffHint.textContent = 'Categories exceed Maribank remaining'; diffPill.classList.add('red-tint') }
-            else { diffLbl.textContent = 'Balanced'; diffVal.textContent = '₱0.00'; diffVal.className = 'stat-value yellow'; diffHint.textContent = 'Perfectly allocated ✓' }
+            if (diff > 0.005) { diffLbl.textContent = 'Excess'; diffVal.textContent = valuesHidden ? '₱••••••' : fmt(diff); diffVal.className = 'stat-value green'; diffHint.textContent = 'Maribank has more than categories need'; diffPill.classList.add('green-tint') }
+            else if (diff < -0.005) { diffLbl.textContent = 'Short Budget'; diffVal.textContent = valuesHidden ? '₱••••••' : fmt(Math.abs(diff)); diffVal.className = 'stat-value red'; diffHint.textContent = 'Categories exceed Maribank remaining'; diffPill.classList.add('red-tint') }
+            else { diffLbl.textContent = 'Balanced'; diffVal.textContent = valuesHidden ? '₱••••••' : '₱0.00'; diffVal.className = 'stat-value yellow'; diffHint.textContent = 'Perfectly allocated ✓' }
             document.getElementById('totalProgress').style.width = pct + '%';
             document.getElementById('progressPct').textContent = pct.toFixed(0) + '% used';
         }
@@ -3243,6 +3260,31 @@
         function toggleDataMenu() { document.getElementById('dataMenu').classList.toggle('open') }
         function closeDataMenu() { document.getElementById('dataMenu').classList.remove('open') }
         document.addEventListener('click', function (e) { const wrap = document.getElementById('dataDropdown'); if (wrap && !wrap.contains(e.target)) closeDataMenu() });
+
+        let valuesHidden = localStorage.getItem('maribank_hidden') === '1';
+        function toggleVisibility() {
+            valuesHidden = !valuesHidden;
+            localStorage.setItem('maribank_hidden', valuesHidden ? '1' : '0');
+            const eyeBtn = document.getElementById('eyeBtn');
+            eyeBtn.innerHTML = valuesHidden
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(253,230,138,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(253,230,138,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+            const mask = '₱••••••';
+            const ids = ['budgetDisplay', 'totalSpent', 'totalRemaining', 'catTotalRemaining', 'diffVal'];
+            if (valuesHidden) {
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.dataset.realText = el.textContent; el.textContent = mask; }
+                });
+            } else {
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && el.dataset.realText) el.textContent = el.dataset.realText;
+                });
+            }
+        }
+
+        if (valuesHidden) document.getElementById('eyeBtn').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(253,230,138,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
         load(); render();
     </script>
