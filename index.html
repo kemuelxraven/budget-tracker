@@ -2774,6 +2774,25 @@
                 border-radius: 18px
             }
         }
+
+        .btn-add-budget-cat {
+            background: linear-gradient(135deg, rgba(245, 158, 11, .18), rgba(180, 83, 9, .25));
+            border: 1.5px solid rgba(253, 230, 138, .5);
+            color: var(--bark);
+            border-radius: 9px;
+            padding: 7px 14px;
+            font-size: .73rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .btn-add-budget-cat:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, .35), rgba(180, 83, 9, .4));
+            border-color: var(--gold-400);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(180, 83, 9, .15)
+        }
     </style>
 </head>
 
@@ -3000,6 +3019,19 @@
             </div>
             <div class="backup-close-row">
                 <button class="btn-modal-cancel" onclick="closeBackup()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Budget Modal -->
+    <div class="modal-overlay" id="addCatBudgetModal">
+        <div class="modal" style="max-width:340px;">
+            <h3>＋ Add to Budget</h3>
+            <label>Amount to Add (₱)</label>
+            <input type="number" id="addCatBudgetAmount" placeholder="0.00" min="0" step="0.01">
+            <div class="modal-actions">
+                <button class="btn-modal-cancel" onclick="closeAddCatBudget()">Cancel</button>
+                <button class="btn-modal-save" onclick="saveAddCatBudget()">Add to Budget</button>
             </div>
         </div>
     </div>
@@ -3473,6 +3505,7 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
                         </div>
                         <div class="expense-log" id="catLog_${cat.id}">${expLog}</div>
                         <div class="cat-actions">
+                            <button class="btn-add-budget-cat" onclick="openAddCatBudget('${cat.id}')">＋ Add</button>
                             <button class="btn-edit-cat" onclick="openEdit('${cat.id}')">✎ Edit</button>
                             <button class="btn-del-cat" onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
                         </div>
@@ -3485,7 +3518,7 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
             });
         }
 
-        ['reportModal', 'editModal', 'editExpModal', 'logsModal', 'backupModal', 'addMoneyModal'].forEach(id => {
+        ['reportModal', 'editModal', 'editExpModal', 'logsModal', 'backupModal', 'addMoneyModal', 'addCatBudgetModal'].forEach(id => {
             document.getElementById(id).addEventListener('click', function (e) {
                 if (e.target === this) {
                     if (id === 'reportModal') closeReport();
@@ -3494,6 +3527,7 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
                     else if (id === 'logsModal') closeLogs();
                     else if (id === 'backupModal') closeBackup();
                     else if (id === 'addMoneyModal') closeAddMoney();
+                    else if (id === 'addCatBudgetModal') closeAddCatBudget();
                 }
             });
         });
@@ -3582,6 +3616,28 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
             if (type === 'spent') { spentBtn.className = 'log-type-btn active-spent'; loanBtn.className = 'log-type-btn' }
             else { loanBtn.className = 'log-type-btn active-loan'; spentBtn.className = 'log-type-btn' }
             spentBtn.dataset.selected = type === 'spent' ? '1' : ''; loanBtn.dataset.selected = type === 'loan' ? '1' : '';
+        }
+        let addCatBudgetTargetId = null;
+        function openAddCatBudget(catId) {
+            addCatBudgetTargetId = catId;
+            document.getElementById('addCatBudgetAmount').value = '';
+            document.getElementById('addCatBudgetModal').classList.add('open');
+            setTimeout(() => document.getElementById('addCatBudgetAmount').focus(), 100);
+        }
+        function closeAddCatBudget() {
+            document.getElementById('addCatBudgetModal').classList.remove('open');
+            addCatBudgetTargetId = null;
+        }
+        function saveAddCatBudget() {
+            const amount = parseFloat(document.getElementById('addCatBudgetAmount').value);
+            if (isNaN(amount) || amount <= 0) { showToast('Enter a valid amount'); return }
+            const cat = state.categories.find(c => c.id === addCatBudgetTargetId);
+            if (!cat) return;
+            cat.budget = (Number(cat.budget) || 0) + amount;
+            save();
+            closeAddCatBudget();
+            render();
+            showToast(`+${fmt(amount)} added to ${cat.name} 🌻`);
         }
         function resetAll() {
             if (!confirm('Reset everything? This will delete all categories, expenses, money-in history, and your total budget.')) return;
