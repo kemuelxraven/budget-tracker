@@ -56,6 +56,7 @@
             position: relative
         }
 
+        /* ── ANIMATED BG ── */
         body::before {
             content: '';
             position: fixed;
@@ -80,6 +81,7 @@
             }
         }
 
+        /* Floating orb particles */
         .particle {
             position: fixed;
             border-radius: 50%;
@@ -103,6 +105,7 @@
             }
         }
 
+        /* ── HEADER ── */
         .header {
             position: sticky;
             top: 0;
@@ -290,6 +293,7 @@
             box-shadow: 0 6px 20px rgba(124, 58, 237, .35)
         }
 
+        /* ── CONTAINER ── */
         .container {
             max-width: 680px;
             margin: 0 auto;
@@ -298,6 +302,7 @@
             z-index: 1
         }
 
+        /* ── BUDGET CARD ── */
         .budget-card {
             border-radius: var(--radius-card);
             padding: 32px;
@@ -321,6 +326,7 @@
             }
         }
 
+        /* animated mesh gradient inside card */
         .budget-card::before {
             content: '';
             position: absolute;
@@ -343,6 +349,7 @@
             }
         }
 
+        /* sparkle dots */
         .budget-card::after {
             content: '';
             position: absolute;
@@ -439,48 +446,6 @@
             background: linear-gradient(90deg, rgba(253, 230, 138, .5), transparent)
         }
 
-        /* ── ADD MONEY BUTTON (above budget display) ── */
-        .btn-add-money {
-            background: linear-gradient(135deg, rgba(245, 158, 11, .35), rgba(180, 83, 9, .45));
-            border: 1.5px solid rgba(253, 230, 138, .6);
-            color: var(--gold-100);
-            border-radius: 30px;
-            padding: 7px 16px;
-            font-family: var(--font-body);
-            font-size: .78rem;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: .3px;
-            transition: var(--transition);
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-            margin-top: 12px;
-        }
-
-        .btn-add-money::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(253, 230, 138, .15), transparent);
-            transform: translateX(-100%);
-            transition: .5s
-        }
-
-        .btn-add-money:hover::before {
-            transform: translateX(100%)
-        }
-
-        .btn-add-money:hover {
-            background: linear-gradient(135deg, rgba(245, 158, 11, .55), rgba(180, 83, 9, .65));
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(180, 83, 9, .35)
-        }
-
         .budget-amount-row {
             display: flex;
             align-items: center;
@@ -490,7 +455,6 @@
             z-index: 1
         }
 
-        /* Budget amount is now display-only */
         .budget-amount {
             font-family: var(--font-display);
             font-size: clamp(2rem, 7vw, 3rem);
@@ -499,7 +463,10 @@
             background: linear-gradient(135deg, var(--gold-100) 0%, var(--gold-200) 40%, var(--gold-300) 70%, var(--gold-100) 100%);
             -webkit-background-clip: text;
             background-clip: text;
+            cursor: pointer;
             padding-bottom: 3px;
+            border-bottom: 1px dashed rgba(253, 230, 138, .3);
+            transition: border-color var(--transition);
             flex: 1;
             min-width: 0;
             word-break: break-all;
@@ -519,6 +486,60 @@
             50% {
                 background-position: 100% 50%
             }
+        }
+
+        .budget-amount:hover {
+            border-color: rgba(253, 230, 138, .7)
+        }
+
+        .budget-edit-wrap {
+            display: none;
+            flex: 1;
+            gap: 8px
+        }
+
+        .budget-edit-wrap.active {
+            display: flex
+        }
+
+        .budget-edit-input {
+            flex: 1;
+            background: rgba(255, 255, 255, .1);
+            border: 1.5px solid rgba(245, 158, 11, .6);
+            border-radius: var(--radius-input);
+            padding: 10px 14px;
+            color: var(--gold-100);
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            outline: none;
+            min-width: 0;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            backdrop-filter: blur(8px);
+        }
+
+        .budget-edit-input:focus {
+            border-color: var(--gold-400);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, .2), 0 0 20px rgba(245, 158, 11, .15)
+        }
+
+        .btn-save-budget {
+            background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
+            color: var(--bark);
+            border: none;
+            border-radius: var(--radius-input);
+            padding: 10px 18px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: .85rem;
+            white-space: nowrap;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(180, 83, 9, .3);
+        }
+
+        .btn-save-budget:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(180, 83, 9, .4)
         }
 
         .stats-grid {
@@ -667,6 +688,7 @@
             letter-spacing: .5px
         }
 
+        /* ── ACTION BUTTONS ROW ── */
         .action-row {
             display: flex;
             justify-content: center;
@@ -786,6 +808,7 @@
             background: linear-gradient(90deg, #fff1f2, #fff5f5)
         }
 
+        /* ── SECTION HEADER ── */
         .section-header {
             display: flex;
             align-items: center;
@@ -856,6 +879,7 @@
             box-shadow: 0 8px 24px rgba(22, 163, 74, .4)
         }
 
+        /* ── ADD CAT FORM ── */
         .add-cat-form {
             background: linear-gradient(145deg, #fff9ec, #fffbf5, #fff9ee);
             border: 1.5px solid var(--gold-200);
@@ -945,6 +969,7 @@
             transform: translateY(-1px)
         }
 
+        /* ── CATEGORY CARDS ── */
         .categories {
             display: flex;
             flex-direction: column;
@@ -1269,6 +1294,7 @@
             cursor: not-allowed
         }
 
+        /* ── EXPENSE LOG ── */
         .expense-log {
             display: flex;
             flex-direction: column;
@@ -1495,6 +1521,7 @@
             border: 1px solid #fde68a
         }
 
+        /* ── MODALS ── */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -1615,136 +1642,6 @@
             transform: translateY(-1px)
         }
 
-        /* ── ADD MONEY MODAL special style ── */
-        .add-money-modal h3 {
-            color: var(--bark);
-        }
-
-        .add-money-modal .btn-modal-save {
-            background: linear-gradient(135deg, var(--gold-500), var(--gold-600));
-            box-shadow: 0 4px 14px rgba(180, 83, 9, .25);
-        }
-
-        .add-money-modal .btn-modal-save:hover {
-            box-shadow: 0 8px 22px rgba(180, 83, 9, .35);
-        }
-
-        .add-money-modal .btn-modal-save:hover {
-            box-shadow: 0 8px 22px rgba(22, 163, 74, .35);
-        }
-
-        /* money-in history inside add money modal */
-        .money-history {
-            margin-top: 20px;
-            border-top: 1px dashed #e8d5a0;
-            padding-top: 14px;
-        }
-
-        .money-history-title {
-            font-size: .64rem;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: var(--bark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .money-history-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-height: 180px;
-            overflow-y: auto;
-        }
-
-        .money-history-list::-webkit-scrollbar {
-            width: 3px
-        }
-
-        .money-history-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--gold-300), var(--gold-500));
-            border-radius: 3px
-        }
-
-        .money-history-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 12px;
-            background: linear-gradient(135deg, var(--gold-50), var(--gold-100));
-            border: 1px solid var(--gold-200);
-            border-radius: 10px;
-            gap: 10px;
-            transition: all var(--transition);
-        }
-
-        .money-history-item:hover {
-            background: linear-gradient(135deg, var(--gold-100), var(--gold-200));
-        }
-
-        .money-history-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .money-history-note {
-            font-size: .8rem;
-            font-weight: 600;
-            color: var(--bark);
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .money-history-date {
-            font-size: .63rem;
-            color: #a08040;
-            display: block;
-            margin-top: 1px;
-        }
-
-        .money-history-amount {
-            font-family: var(--font-display);
-            font-size: .9rem;
-            font-weight: 700;
-            color: var(--green-600);
-            white-space: nowrap;
-        }
-
-        .btn-del-money {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #c0a060;
-            font-size: 1rem;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            transition: all var(--transition);
-            flex-shrink: 0;
-        }
-
-        .btn-del-money:hover {
-            color: var(--danger);
-            background: #fee2e2;
-            transform: scale(1.2)
-        }
-
-        .no-money-history {
-            font-size: .78rem;
-            color: #c0a060;
-            text-align: center;
-            padding: 12px;
-            font-style: italic;
-        }
-
         /* ── REPORT ── */
         .report-modal {
             background: white;
@@ -1801,69 +1698,6 @@
             background: #f0e4c0;
             transform: translateY(-1px);
             box-shadow: 0 4px 10px rgba(180, 83, 9, .1)
-        }
-
-        /* Money-in section in report */
-        .report-money-in {
-            background: linear-gradient(135deg, var(--gold-50), var(--gold-100));
-            border: 1.5px solid var(--gold-200);
-            border-radius: 16px;
-            padding: 14px 18px;
-            margin-bottom: 14px;
-        }
-
-        .report-money-in-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .report-money-in-title {
-            font-size: .64rem;
-            font-weight: 700;
-            letter-spacing: 1.6px;
-            text-transform: uppercase;
-            color: var(--gold-600);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .report-money-in-total {
-            font-family: var(--font-display);
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--gold-600);
-        }
-
-        .report-money-in-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px dashed rgba(22, 163, 74, .2);
-            font-size: .8rem;
-        }
-
-        .report-money-in-item:last-child {
-            border-bottom: none
-        }
-
-        .report-money-in-note {
-            color: var(--bark);
-            font-weight: 500;
-        }
-
-        .report-money-in-date {
-            color: #a08040;
-            font-size: .7rem;
-        }
-
-        .report-money-in-amt {
-            font-family: var(--font-display);
-            font-weight: 700;
-            color: var(--gold-600);
         }
 
         .report-month {
@@ -1971,11 +1805,6 @@
             border: 1px solid rgba(180, 83, 9, .18)
         }
 
-        .summary-box.moneyin-box {
-            background: linear-gradient(135deg, var(--gold-50), var(--gold-100));
-            border: 1px solid var(--gold-200)
-        }
-
         .summary-box-label {
             font-size: .57rem;
             font-weight: 600;
@@ -1995,10 +1824,6 @@
             color: var(--bark)
         }
 
-        .moneyin-box .summary-box-label {
-            color: var(--gold-600)
-        }
-
         .summary-box-value {
             font-family: var(--font-display);
             font-size: 1.05rem;
@@ -2016,10 +1841,6 @@
 
         .total-box .summary-box-value {
             color: var(--bark)
-        }
-
-        .moneyin-box .summary-box-value {
-            color: var(--gold-600)
         }
 
         .report-cat-row {
@@ -2482,6 +2303,7 @@
             color: var(--gold-100)
         }
 
+        /* ── EMPTY STATE ── */
         .empty-state {
             text-align: center;
             padding: 52px 24px;
@@ -2525,6 +2347,7 @@
             font-weight: 600
         }
 
+        /* ── BACKUP MODAL ── */
         .backup-modal {
             background: white;
             border-radius: var(--radius-card);
@@ -2710,6 +2533,7 @@
             text-align: center
         }
 
+        /* ── TOAST ── */
         .toast {
             position: fixed;
             bottom: 28px;
@@ -2733,6 +2557,7 @@
             transform: translateX(-50%) translateY(0)
         }
 
+        /* ── EDIT EXP MODAL TYPE ── */
         #editExpTypeSpent.active-spent,
         #editExpTypeLoan.active-loan {
             box-shadow: 0 3px 10px rgba(0, 0, 0, .12);
@@ -2779,6 +2604,7 @@
 
 <body>
 
+    <!-- animated particles -->
     <div class="particle"
         style="width:300px;height:300px;left:5%;top:20%;animation-duration:18s;animation-delay:0s;opacity:.4"></div>
     <div class="particle"
@@ -2817,12 +2643,14 @@
                     </svg>
                 </button>
             </div>
-
             <div class="budget-amount-row">
-                <div class="budget-amount" id="budgetDisplay">₱0.00</div>
-                <button class="btn-add-money" onclick="openAddMoney()">＋ Add Money</button>
+                <div class="budget-amount" id="budgetDisplay" onclick="editBudget()">₱0.00</div>
+                <div class="budget-edit-wrap" id="budgetEditWrap">
+                    <input type="number" id="budgetInput" class="budget-edit-input" placeholder="0.00" min="0"
+                        step="0.01">
+                    <button class="btn-save-budget" onclick="saveBudget()">Save</button>
+                </div>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-pill">
                     <span class="stat-label">Total Spent</span>
@@ -2858,7 +2686,8 @@
             <div class="dropdown-wrap" id="dataDropdown">
                 <button class="btn-data-menu" onclick="toggleDataMenu()">🗂️ Data ▾</button>
                 <div class="data-menu" id="dataMenu">
-                    <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup & Restore</button>
+                    <button class="data-menu-item" onclick="openBackup();closeDataMenu()">💾 Backup &
+                        Restore</button>
                     <button class="data-menu-item danger-item" onclick="resetAll();closeDataMenu()">🗑️ Reset
                         Everything</button>
                 </div>
@@ -2890,32 +2719,6 @@
                 spending.</p>
         </div>
 
-    </div>
-
-    <!-- Add Money Modal -->
-    <div class="modal-overlay" id="addMoneyModal">
-        <div class="modal add-money-modal">
-            <h3>🌻 Add Money</h3>
-            <label>Note / Source</label>
-            <input type="text" id="addMoneyNote" placeholder="e.g. Salary, Allowance, Transfer" maxlength="60">
-            <label>Amount to Add (₱)</label>
-            <input type="number" id="addMoneyAmount" placeholder="0.00" min="0" step="0.01">
-            <label>Date</label>
-            <input type="date" id="addMoneyDate">
-            <div class="modal-actions">
-                <button class="btn-modal-cancel" onclick="closeAddMoney()">Cancel</button>
-                <button class="btn-modal-save" onclick="saveAddMoney()">Add to Budget</button>
-            </div>
-            <!-- Money-in history -->
-            <div class="money-history">
-                <div class="money-history-title">
-                    <span>📋 Money-In History</span>
-                </div>
-                <div class="money-history-list" id="moneyHistoryList">
-                    <div class="no-money-history">No money added yet</div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Edit Modal -->
@@ -2953,7 +2756,8 @@
                     <input type="text" class="logs-search" id="logsSearch" placeholder="🔍 Search…"
                         oninput="renderLogsTable()">
                     <button class="logs-filter-btn active" id="filterAll" onclick="setLogsFilter('all')">All</button>
-                    <button class="logs-filter-btn" id="filterSpent" onclick="setLogsFilter('spent')">💸 Spent</button>
+                    <button class="logs-filter-btn" id="filterSpent" onclick="setLogsFilter('spent')">💸
+                        Spent</button>
                     <button class="logs-filter-btn" id="filterLoan" onclick="setLogsFilter('loan')">💜 Loan</button>
                     <span class="logs-count" id="logsCount">0 entries</span>
                     <button class="btn-close-report" onclick="closeLogs()">✕ Close</button>
@@ -2968,7 +2772,8 @@
     <div class="modal-overlay" id="backupModal">
         <div class="backup-modal">
             <h3>💾 Backup & Restore</h3>
-            <p class="backup-subtitle">Export your data to a file to keep it safe, or import a previously saved backup
+            <p class="backup-subtitle">Export your data to a file to keep it safe, or import a previously saved
+                backup
                 to restore your records.</p>
             <div class="backup-section">
                 <div class="backup-section-title">📤 Export Data</div>
@@ -2992,7 +2797,8 @@
                         style="display:none;">
                 </div>
                 <div class="import-warning" id="importWarning"></div>
-                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore (Replace
+                <button class="btn-confirm-import" id="btnConfirmImport" onclick="confirmImport()">✅ Restore
+                    (Replace
                     all)</button>
                 <button class="btn-confirm-import" id="btnMergeImport" onclick="mergeImport()"
                     style="background:linear-gradient(135deg,#7c3aed,#6d28d9);margin-top:6px;">➕ Merge into
@@ -3031,14 +2837,12 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // state now includes moneyIn array: [{id, note, amount, dateRaw, date, loggedAt}]
-        let state = { totalBudget: 0, categories: [], moneyIn: [] };
+        let state = { totalBudget: 0, categories: [] };
         let editingId = null;
-
         function save() { localStorage.setItem('maribank_v3', JSON.stringify(state)) }
         function load() {
             const raw = localStorage.getItem('maribank_v3') || localStorage.getItem('maribank_tracker_v2') || localStorage.getItem('maribank_tracker');
-            if (raw) { try { const parsed = JSON.parse(raw); state = { moneyIn: [], ...parsed }; } catch (e) { } }
+            if (raw) { try { state = JSON.parse(raw) } catch (e) { } }
         }
         function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6) }
         function fmt(n) { return '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }
@@ -3063,11 +2867,6 @@
         function totalSpentAll() { return state.categories.reduce((s, c) => s + catSpent(c), 0) }
         function catTotalRem() { return state.categories.reduce((s, c) => s + Math.max(0, c.budget - catSpent(c)), 0) }
         function isDepleted(cat) { return cat.budget > 0 && catSpent(cat) >= cat.budget }
-        function parseFallbackKey(dateStr) {
-            if (!dateStr) return '0000-00'; const parts = dateStr.replace(',', '').split(' ');
-            if (parts.length < 3) return '0000-00';
-            return `${parts[2]}-${String(MONTHS_SHORT.indexOf(parts[0]) + 1).padStart(2, '0')}`;
-        }
 
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -3075,79 +2874,28 @@
             setTimeout(() => t.classList.remove('show'), 2400);
         }
 
-        // ── ADD MONEY ──
-        function openAddMoney() {
-            document.getElementById('addMoneyNote').value = '';
-            document.getElementById('addMoneyAmount').value = '';
-            document.getElementById('addMoneyDate').value = todayISO();
-            renderMoneyHistory();
-            document.getElementById('addMoneyModal').classList.add('open');
-            setTimeout(() => document.getElementById('addMoneyNote').focus(), 100);
+        function editBudget() {
+            document.getElementById('budgetDisplay').style.display = 'none';
+            document.getElementById('budgetEditWrap').classList.add('active');
+            const inp = document.getElementById('budgetInput'); inp.value = state.totalBudget || ''; inp.focus();
         }
-
-        function closeAddMoney() {
-            document.getElementById('addMoneyModal').classList.remove('open');
+        function saveBudget() {
+            const val = parseFloat(document.getElementById('budgetInput').value);
+            if (isNaN(val) || val < 0) { showToast('Enter a valid amount'); return }
+            state.totalBudget = val; save();
+            document.getElementById('budgetEditWrap').classList.remove('active');
+            document.getElementById('budgetDisplay').style.display = '';
+            renderBudgetCard(); showToast('Budget updated ✓');
         }
-
-        function saveAddMoney() {
-            const note = document.getElementById('addMoneyNote').value.trim();
-            const amount = parseFloat(document.getElementById('addMoneyAmount').value);
-            const dateISO = document.getElementById('addMoneyDate').value;
-            if (!note) { showToast('Add a note/source'); return }
-            if (isNaN(amount) || amount <= 0) { showToast('Enter a valid amount'); return }
-            if (!dateISO) { showToast('Pick a date'); return }
-            if (!state.moneyIn) state.moneyIn = [];
-            const entry = { id: uid(), note, amount, dateRaw: dateISO, date: isoToLabel(dateISO), loggedAt: Date.now() };
-            state.moneyIn.unshift(entry);
-            state.totalBudget = (Number(state.totalBudget) || 0) + amount;
-            save();
-            document.getElementById('addMoneyAmount').value = '';
-            document.getElementById('addMoneyNote').value = '';
-            renderMoneyHistory();
-            renderBudgetCard();
-            showToast(`+${fmt(amount)} added to budget 💚`);
-        }
-
-        function deleteMoneyIn(id) {
-            const entry = (state.moneyIn || []).find(e => e.id === id);
-            if (!entry) return;
-            if (!confirm(`Remove "${entry.note}" (${fmt(entry.amount)}) from budget history?`)) return;
-            state.totalBudget = Math.max(0, (Number(state.totalBudget) || 0) - Number(entry.amount));
-            state.moneyIn = (state.moneyIn || []).filter(e => e.id !== id);
-            save();
-            renderMoneyHistory();
-            renderBudgetCard();
-            showToast('Entry removed');
-        }
-
-        function renderMoneyHistory() {
-            const list = document.getElementById('moneyHistoryList');
-            const entries = state.moneyIn || [];
-            if (entries.length === 0) {
-                list.innerHTML = '<div class="no-money-history">No money added yet</div>';
-                return;
-            }
-            list.innerHTML = entries.map(e => `
-                <div class="money-history-item">
-                    <div class="money-history-info">
-                        <span class="money-history-note">${e.note}</span>
-                        <span class="money-history-date">📅 ${e.date}</span>
-                    </div>
-                    <span class="money-history-amount">${fmt(e.amount)}</span>
-                    <button class="btn-del-money" onclick="deleteMoneyIn('${e.id}')" title="Remove">×</button>
-                </div>
-            `).join('');
-        }
-
-        document.getElementById('addMoneyAmount').addEventListener('keydown', e => {
-            if (e.key === 'Enter') saveAddMoney();
+        document.getElementById('budgetInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') saveBudget();
+            if (e.key === 'Escape') { document.getElementById('budgetEditWrap').classList.remove('active'); document.getElementById('budgetDisplay').style.display = '' }
         });
 
         function toggleAddForm() {
             const f = document.getElementById('addCatForm'); f.classList.toggle('open');
             if (f.classList.contains('open')) document.getElementById('newCatName').focus();
         }
-
         function addCategory() {
             const name = document.getElementById('newCatName').value.trim();
             const budget = parseFloat(document.getElementById('newCatBudget').value);
@@ -3202,12 +2950,10 @@
             if (!name || isNaN(budget) || budget < 0) { showToast('Fill in all fields'); return }
             cat.name = name; cat.budget = budget; save(); closeEditModal(); render(); showToast('Category updated ✓');
         }
-
         function deleteCategory(catId) {
             if (!confirm('Delete this category and all its expenses?')) return;
             state.categories = state.categories.filter(c => c.id !== catId); save(); render(); showToast('Category deleted');
         }
-
         function toggleCat(catId) {
             const body = document.getElementById('catBody_' + catId); const chev = document.getElementById('chev_' + catId);
             if (body) { body.classList.toggle('open'); if (chev) chev.classList.toggle('up') }
@@ -3233,6 +2979,12 @@
             renderLogsTable();
         }
         function setLogsMonth(key) { logsActiveMonth = key; renderLogsMonthTabs(); renderLogsTable() }
+
+        function parseFallbackKey(dateStr) {
+            if (!dateStr) return '0000-00'; const parts = dateStr.replace(',', '').split(' ');
+            if (parts.length < 3) return '0000-00';
+            return `${parts[2]}-${String(MONTHS_SHORT.indexOf(parts[0]) + 1).padStart(2, '0')}`;
+        }
 
         function renderLogsMonthTabs() {
             const monthSet = new Set();
@@ -3269,15 +3021,15 @@
                 const isLoan = e.type === 'loan'; const dateStr = fmtLogDate(e); const timeStr = fmtLogTime(e);
                 const dateTimeStr = timeStr ? `${dateStr}<br><span style="font-size:.65rem;color:#c0a0a0;">${timeStr}</span>` : dateStr;
                 return `<tr class="${isLoan ? 'loan-row' : ''}">
-                    <td><span class="log-cat-badge">${e.catIcon} ${e.catName}</span></td>
-                    <td class="log-note-cell" title="${e.note}">${e.note}</td>
-                    <td><span class="log-type-pill ${isLoan ? 'pill-loan' : 'pill-spent'}">${isLoan ? 'Loan' : 'Spent'}</span></td>
-                    <td class="log-amount-cell ${isLoan ? 'is-loan' : 'is-spent'}">${fmt(e.amount)}</td>
-                    <td class="log-date-cell">${dateTimeStr}</td>
-                </tr>`;
+      <td><span class="log-cat-badge">${e.catIcon} ${e.catName}</span></td>
+      <td class="log-note-cell" title="${e.note}">${e.note}</td>
+      <td><span class="log-type-pill ${isLoan ? 'pill-loan' : 'pill-spent'}">${isLoan ? 'Loan' : 'Spent'}</span></td>
+      <td class="log-amount-cell ${isLoan ? 'is-loan' : 'is-spent'}">${fmt(e.amount)}</td>
+      <td class="log-date-cell">${dateTimeStr}</td>
+    </tr>`;
             }).join('');
             wrap.innerHTML = `<table class="logs-table"><thead><tr><th>Category</th><th>Note</th><th>Type</th><th>Amount</th><th>Date / Time</th></tr></thead><tbody>${rows}</tbody></table>
-            <div class="logs-grand-row"><span class="logs-grand-label">Total for this month</span><span class="logs-grand-val">${fmt(grandTotal)}</span></div>`;
+  <div class="logs-grand-row"><span class="logs-grand-label">Total for this month</span><span class="logs-grand-val">${fmt(grandTotal)}</span></div>`;
         }
 
         function openReport() { buildReport(); document.getElementById('reportModal').classList.add('open') }
@@ -3286,109 +3038,31 @@
 
         function buildReport() {
             const body = document.getElementById('reportBody');
-            const allExp = [];
-            state.categories.forEach(cat => cat.expenses.forEach(e => allExp.push({ ...e, type: expType(e), catName: cat.name })));
-
-            // collect all months from both expenses and money-in
-            const monthSet = new Set();
-            allExp.forEach(e => { const key = e.dateRaw ? isoToMonthKey(e.dateRaw) : parseFallbackKey(e.date); if (key && key !== '0000-00') monthSet.add(key) });
-            (state.moneyIn || []).forEach(e => { if (e.dateRaw) monthSet.add(isoToMonthKey(e.dateRaw)) });
-
-            if (monthSet.size === 0 && allExp.length === 0) { body.innerHTML = '<div class="report-empty">🌱 No expenses or money added yet.</div>'; return }
-
-            const sortedKeys = Array.from(monthSet).sort((a, b) => b.localeCompare(a));
+            const allExp = []; state.categories.forEach(cat => cat.expenses.forEach(e => allExp.push({ ...e, type: expType(e), catName: cat.name })));
+            if (allExp.length === 0) { body.innerHTML = '<div class="report-empty">🌱 No expenses logged yet.</div>'; return }
+            const monthMap = {};
+            allExp.forEach(e => { const key = e.dateRaw ? isoToMonthKey(e.dateRaw) : parseFallbackKey(e.date); if (!monthMap[key]) monthMap[key] = []; monthMap[key].push(e) });
+            const sortedKeys = Object.keys(monthMap).sort((a, b) => b.localeCompare(a));
             const grandTotal = allExp.reduce((s, e) => s + Number(e.amount), 0);
             const grandSpent = allExp.filter(e => e.type === 'spent').reduce((s, e) => s + Number(e.amount), 0);
             const grandLoan = allExp.filter(e => e.type === 'loan').reduce((s, e) => s + Number(e.amount), 0);
-            const grandMoneyIn = (state.moneyIn || []).reduce((s, e) => s + Number(e.amount), 0);
-
             let html = '';
             sortedKeys.forEach((key, idx) => {
-                const [y, m] = key.split('-'); const monthLabel = `${MONTHS_FULL[parseInt(m) - 1]} ${y}`;
-
-                // money-in for this month
-                const monthMoneyIn = (state.moneyIn || []).filter(e => e.dateRaw && isoToMonthKey(e.dateRaw) === key);
-                const monthMoneyInTotal = monthMoneyIn.reduce((s, e) => s + Number(e.amount), 0);
-
-                // expenses for this month
-                const exps = allExp.filter(e => {
-                    const k = e.dateRaw ? isoToMonthKey(e.dateRaw) : parseFallbackKey(e.date);
-                    return k === key;
-                });
+                const exps = monthMap[key]; const [y, m] = key.split('-'); const monthLabel = `${MONTHS_FULL[parseInt(m) - 1]} ${y}`;
                 const monthTotal = exps.reduce((s, e) => s + Number(e.amount), 0);
                 const monthSpent = exps.filter(e => e.type === 'spent').reduce((s, e) => s + Number(e.amount), 0);
                 const monthLoan = exps.filter(e => e.type === 'loan').reduce((s, e) => s + Number(e.amount), 0);
-
-                // money-in section for this month
-                let moneyInHtml = '';
-                if (monthMoneyIn.length > 0) {
-                    const items = monthMoneyIn.map(e =>
-                        `<div class="report-money-in-item">
-                            <span class="report-money-in-note">${e.note}</span>
-                            <span class="report-money-in-date">${e.date}</span>
-                            <span class="report-money-in-amt">${fmt(e.amount)}</span>
-                        </div>`
-                    ).join('');
-                    moneyInHtml = `<div class="report-money-in">
-                        <div class="report-money-in-header">
-                            <span class="report-money-in-title">💚 Money Added This Month</span>
-                            <span class="report-money-in-total">${fmt(monthMoneyInTotal)}</span>
-                        </div>
-                        ${items}
-                    </div>`;
-                }
-
-                // category expense rows
-                const catMap = {};
-                exps.forEach(e => { if (!catMap[e.catName]) catMap[e.catName] = []; catMap[e.catName].push(e) });
+                const catMap = {}; exps.forEach(e => { if (!catMap[e.catName]) catMap[e.catName] = []; catMap[e.catName].push(e) });
                 const catRows = Object.entries(catMap).map(([name, ces]) => {
                     const catAmt = ces.reduce((s, e) => s + Number(e.amount), 0);
-                    const expItems = ces.map(e => {
-                        const isLoan = e.type === 'loan';
-                        return `<div class="report-exp-item${isLoan ? ' loan-exp-row' : ''}"><span class="rexp-type-tag ${isLoan ? 'rtag-loan' : 'rtag-spent'}">${isLoan ? 'Loan' : 'Spent'}</span><span class="rexp-note">${e.note}</span><span class="rexp-date">${e.date}</span><span class="rexp-amt${isLoan ? ' loan-rexp' : ''}">${fmt(e.amount)}</span></div>`;
-                    }).join('');
+                    const expItems = ces.map(e => { const isLoan = e.type === 'loan'; return `<div class="report-exp-item${isLoan ? ' loan-exp-row' : ''}"><span class="rexp-type-tag ${isLoan ? 'rtag-loan' : 'rtag-spent'}">${isLoan ? 'Loan' : 'Spent'}</span><span class="rexp-note">${e.note}</span><span class="rexp-date">${e.date}</span><span class="rexp-amt${isLoan ? ' loan-rexp' : ''}">${fmt(e.amount)}</span></div>` }).join('');
                     return `<div class="report-cat-row"><span class="report-cat-name">${name}</span><span class="report-cat-amt">${fmt(catAmt)}</span></div><div class="report-exp-list">${expItems}</div>`;
                 }).join('');
-
-                const summaryBoxes = `
-${monthMoneyInTotal > 0 ? `<div class="summary-box moneyin-box"><span class="summary-box-label">Money Added</span><span class="summary-box-value">${fmt(monthMoneyInTotal)}</span></div>` : ''}                    <div class="summary-box spent-box"><span class="summary-box-label">💸 Total Spent</span><span class="summary-box-value">${fmt(monthSpent)}</span></div>
-                    ${monthLoan > 0 ? `<div class="summary-box loan-boDx"><span class="summary-box-label">💜 Total Loan</span><span class="summary-box-value">${fmt(monthLoan)}</span></div>` : ''}
-                    <div class="summary-box total-box"><span class="summary-box-label">📊 Grand Total</span><span class="summary-box-value">${fmt(monthTotal)}</span></div>
-                `;
-
-                html += `<div class="report-month">
-                    <div class="report-month-hdr" onclick="toggleReportMonth('rm${idx}')">
-                        <span class="report-month-name">📅 ${monthLabel}</span>
-                        <div class="report-month-totals">
-${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:linear-gradient(135deg,var(--gold-50),var(--gold-100));color:var(--gold-600);border:1px solid var(--gold-200);">${fmt(monthMoneyInTotal)}</span>` : ''}                            <span class="report-total-chip chip-spent-total">${fmt(monthTotal)}</span>
-                        </div>
-                    </div>
-                    <div class="report-month-body${idx === 0 ? ' open' : ''}" id="rm${idx}">
-                        ${moneyInHtml}
-                        <div class="report-summary-row">${summaryBoxes}</div>
-                        ${catRows || '<div style="color:#a08040;font-size:.8rem;font-style:italic;padding:8px 0;">No expenses this month.</div>'}
-                    </div>
-                </div>`;
+                const summaryRow = `<div class="report-summary-row"><div class="summary-box spent-box"><span class="summary-box-label">💸 Total Spent</span><span class="summary-box-value">${fmt(monthSpent)}</span></div>${monthLoan > 0 ? `<div class="summary-box loan-box"><span class="summary-box-label">💜 Total Loan</span><span class="summary-box-value">${fmt(monthLoan)}</span></div>` : ''}<div class="summary-box total-box"><span class="summary-box-label">📊 Grand Total</span><span class="summary-box-value">${fmt(monthTotal)}</span></div></div>`;
+                html += `<div class="report-month"><div class="report-month-hdr" onclick="toggleReportMonth('rm${idx}')"><span class="report-month-name">📅 ${monthLabel}</span><div class="report-month-totals"><span class="report-total-chip chip-spent-total">${fmt(monthTotal)}</span></div></div><div class="report-month-body${idx === 0 ? ' open' : ''}" id="rm${idx}">${summaryRow}${catRows}</div></div>`;
             });
-
-            // grand totals footer
             html += `<div class="report-grand"><span class="report-grand-label">Grand Total All Expenses</span><span class="report-grand-amount">${fmt(grandTotal)}</span></div>`;
-            if (grandMoneyIn > 0) {
-                html += `<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-                    <div style="flex:1;min-width:120px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(22,163,74,.25);border-radius:14px;padding:12px 16px;">
-                        <span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--green-600);display:block;margin-bottom:4px;">All-time Money Added</span>
-                        <span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--green-600);">${fmt(grandMoneyIn)}</span>
-                    </div>
-                    <div style="flex:1;min-width:120px;background:linear-gradient(135deg,#fef9ec,#fef3c7);border:1px solid rgba(22,163,74,.2);border-radius:14px;padding:12px 16px;">
-                        <span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-600);display:block;margin-bottom:4px;">All-time Spent</span>
-                        <span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--green-600);">${fmt(grandSpent)}</span>
-                    </div>
-                    ${grandLoan > 0 ? `<div style="flex:1;min-width:120px;background:linear-gradient(135deg,#faf5ff,#f3eeff);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:12px 16px;"><span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--loan-color);display:block;margin-bottom:4px;">All-time Loan</span><span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--loan-color);">${fmt(grandLoan)}</span></div>` : ''}
-                </div>`;
-            } else if (grandLoan > 0) {
-                html += `<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;"><div style="flex:1;min-width:120px;background:linear-gradient(135deg,#fef9ec,#fef3c7);border:1px solid rgba(22,163,74,.2);border-radius:14px;padding:12px 16px;"><span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-600);display:block;margin-bottom:4px;">All-time Spent</span><span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--green-600);">${fmt(grandSpent)}</span></div><div style="flex:1;min-width:120px;background:linear-gradient(135deg,#faf5ff,#f3eeff);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:12px 16px;"><span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--loan-color);display:block;margin-bottom:4px;">All-time Loan</span><span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--loan-color);">${fmt(grandLoan)}</span></div></div>`;
-            }
-
+            if (grandLoan > 0) html += `<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;"><div style="flex:1;min-width:120px;background:linear-gradient(135deg,#fef9ec,#fef3c7);border:1px solid rgba(22,163,74,.2);border-radius:14px;padding:12px 16px;"><span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold-600);display:block;margin-bottom:4px;">All-time Spent</span><span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--green-600);">${fmt(grandSpent)}</span></div><div style="flex:1;min-width:120px;background:linear-gradient(135deg,#faf5ff,#f3eeff);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:12px 16px;"><span style="font-size:.57rem;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:var(--loan-color);display:block;margin-bottom:4px;">All-time Loan</span><span style="font-family:var(--font-display);font-size:1.05rem;font-weight:800;color:var(--loan-color);">${fmt(grandLoan)}</span></div></div>`;
             body.innerHTML = html;
         }
 
@@ -3446,38 +3120,38 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
                     return `<div class="expense-item${isLoan ? ' loan-item' : ''}"><div class="exp-main"><span class="exp-note" title="${e.note}">${e.note}</span><span class="exp-meta">📅 ${e.date}</span></div><span class="type-chip ${isLoan ? 'chip-loan' : 'chip-spent'}">${isLoan ? 'Loan' : 'Spent'}</span><span class="exp-amount${isLoan ? ' loan-amt' : ''}">${fmt(e.amount)}</span><button class="btn-edit-exp" onclick="editExpense('${cat.id}','${e.id}')" title="Edit">✎</button><button class="btn-del-exp" onclick="deleteExpense('${cat.id}','${e.id}')" title="Remove">×</button></div>`;
                 }).join('');
                 return `<div class="cat-card${depleted ? ' depleted' : ''}" id="catCard_${cat.id}" style="animation-delay:${i * .07}s">
-                    <div class="cat-header" onclick="toggleCat('${cat.id}')">
-                        <div class="cat-icon"><span class="cat-emoji">${icon}</span></div>
-                        <div class="cat-info">
-                            <div class="cat-name">${cat.name}<span class="badge-over" id="catBadge_${cat.id}" style="display:${rem < 0 ? 'inline' : 'none'}">Over!</span><span class="badge-zero" id="catZero_${cat.id}" style="display:${depleted && rem >= 0 ? 'inline' : 'none'}">Depleted</span></div>
-                            <div class="cat-sub">Budget: ${fmt(cat.budget)}</div>
-                        </div>
-                        <div class="cat-amounts">
-                            <span class="cat-remaining${remCls}" id="catRem_${cat.id}">${fmt(rem)}</span>
-                            <span class="cat-spent-sub" id="catSpentSub_${cat.id}">${fmt(spent)} spent</span>
-                        </div>
-                        <span class="chevron" id="chev_${cat.id}">▼</span>
-                    </div>
-                    <div class="cat-progress-wrap"><div class="cat-progress-track"><div class="cat-progress-fill ${cls}" id="catProg_${cat.id}" style="width:${pct}%"></div></div></div>
-                    <div class="cat-body" id="catBody_${cat.id}">
-                        <div class="depleted-notice" id="catNotice_${cat.id}" style="display:${depleted ? 'flex' : 'none'}">⚠️ Budget fully used — edit the category to increase your budget.</div>
-                        <div class="log-type-row">
-                            <button class="log-type-btn active-spent" data-type-group="${cat.id}" data-type="spent" data-active-type="${cat.id}" onclick="setLogType('${cat.id}','spent',this)">💸 Spent</button>
-                            <button class="log-type-btn" data-type-group="${cat.id}" data-type="loan" onclick="setLogType('${cat.id}','loan',this)">💜 Loan</button>
-                        </div>
-                        <div class="exp-input-row">
-                            <input type="text" id="expNote_${cat.id}" placeholder="Note (e.g. Electric bill)" maxlength="60" ${dis}>
-                            <input type="number" id="expAmt_${cat.id}" placeholder="₱ Amount" min="0" step="0.01" style="max-width:115px;" ${dis}>
-                            <input type="date" id="expDate_${cat.id}" value="${todayVal}" style="max-width:150px;" ${dis}>
-                            <button class="btn-log" id="catLogBtn_${cat.id}" onclick="logExpense('${cat.id}')" ${dis}>+ Log</button>
-                        </div>
-                        <div class="expense-log" id="catLog_${cat.id}">${expLog}</div>
-                        <div class="cat-actions">
-                            <button class="btn-edit-cat" onclick="openEdit('${cat.id}')">✎ Edit</button>
-                            <button class="btn-del-cat" onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
-                        </div>
-                    </div>
-                </div>`;
+      <div class="cat-header" onclick="toggleCat('${cat.id}')">
+        <div class="cat-icon"><span class="cat-emoji">${icon}</span></div>
+        <div class="cat-info">
+          <div class="cat-name">${cat.name}<span class="badge-over" id="catBadge_${cat.id}" style="display:${rem < 0 ? 'inline' : 'none'}">Over!</span><span class="badge-zero" id="catZero_${cat.id}" style="display:${depleted && rem >= 0 ? 'inline' : 'none'}">Depleted</span></div>
+          <div class="cat-sub">Budget: ${fmt(cat.budget)}</div>
+        </div>
+        <div class="cat-amounts">
+          <span class="cat-remaining${remCls}" id="catRem_${cat.id}">${fmt(rem)}</span>
+          <span class="cat-spent-sub" id="catSpentSub_${cat.id}">${fmt(spent)} spent</span>
+        </div>
+        <span class="chevron" id="chev_${cat.id}">▼</span>
+      </div>
+      <div class="cat-progress-wrap"><div class="cat-progress-track"><div class="cat-progress-fill ${cls}" id="catProg_${cat.id}" style="width:${pct}%"></div></div></div>
+      <div class="cat-body" id="catBody_${cat.id}">
+        <div class="depleted-notice" id="catNotice_${cat.id}" style="display:${depleted ? 'flex' : 'none'}">⚠️ Budget fully used — edit the category to increase your budget.</div>
+        <div class="log-type-row">
+          <button class="log-type-btn active-spent" data-type-group="${cat.id}" data-type="spent" data-active-type="${cat.id}" onclick="setLogType('${cat.id}','spent',this)">💸 Spent</button>
+          <button class="log-type-btn" data-type-group="${cat.id}" data-type="loan" onclick="setLogType('${cat.id}','loan',this)">💜 Loan</button>
+        </div>
+        <div class="exp-input-row">
+          <input type="text" id="expNote_${cat.id}" placeholder="Note (e.g. Electric bill)" maxlength="60" ${dis}>
+          <input type="number" id="expAmt_${cat.id}" placeholder="₱ Amount" min="0" step="0.01" style="max-width:115px;" ${dis}>
+          <input type="date" id="expDate_${cat.id}" value="${todayVal}" style="max-width:150px;" ${dis}>
+          <button class="btn-log" id="catLogBtn_${cat.id}" onclick="logExpense('${cat.id}')" ${dis}>+ Log</button>
+        </div>
+        <div class="expense-log" id="catLog_${cat.id}">${expLog}</div>
+        <div class="cat-actions">
+          <button class="btn-edit-cat" onclick="openEdit('${cat.id}')">✎ Edit</button>
+          <button class="btn-del-cat" onclick="deleteCategory('${cat.id}')">🗑 Delete</button>
+        </div>
+      </div>
+    </div>`;
             }).join('');
             state.categories.forEach(cat => {
                 const el = document.getElementById('expAmt_' + cat.id);
@@ -3485,7 +3159,7 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
             });
         }
 
-        ['reportModal', 'editModal', 'editExpModal', 'logsModal', 'backupModal', 'addMoneyModal'].forEach(id => {
+        ['reportModal', 'editModal', 'editExpModal', 'logsModal', 'backupModal'].forEach(id => {
             document.getElementById(id).addEventListener('click', function (e) {
                 if (e.target === this) {
                     if (id === 'reportModal') closeReport();
@@ -3493,7 +3167,6 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
                     else if (id === 'editExpModal') closeEditExpModal();
                     else if (id === 'logsModal') closeLogs();
                     else if (id === 'backupModal') closeBackup();
-                    else if (id === 'addMoneyModal') closeAddMoney();
                 }
             });
         });
@@ -3540,14 +3213,11 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
         }
         function confirmImport() {
             if (!pendingImportData) return; const { _maribank_backup, _version, _exportedAt, ...restored } = pendingImportData;
-            state = { totalBudget: 0, categories: [], moneyIn: [], ...restored }; save(); closeBackup(); render(); showToast('Data restored 🌻');
+            state = { totalBudget: 0, categories: [], ...restored }; save(); closeBackup(); render(); showToast('Data restored 🌻');
         }
         function mergeImport() {
             if (!pendingImportData) return; const { _maribank_backup, _version, _exportedAt, ...incoming } = pendingImportData;
             state.totalBudget = (Number(state.totalBudget) || 0) + (Number(incoming.totalBudget) || 0);
-            // merge money-in
-            const existingMoneyIds = new Set((state.moneyIn || []).map(e => e.id));
-            (incoming.moneyIn || []).forEach(e => { if (!existingMoneyIds.has(e.id)) { if (!state.moneyIn) state.moneyIn = []; state.moneyIn.push(e) } });
             (incoming.categories || []).forEach(inCat => {
                 const existing = state.categories.find(c => c.name.toLowerCase() === inCat.name.toLowerCase());
                 if (existing) { const existingIds = new Set(existing.expenses.map(e => e.id)); inCat.expenses.forEach(e => { if (!existingIds.has(e.id)) existing.expenses.push(e) }) }
@@ -3584,8 +3254,8 @@ ${monthMoneyInTotal > 0 ? `<span class="report-total-chip" style="background:lin
             spentBtn.dataset.selected = type === 'spent' ? '1' : ''; loanBtn.dataset.selected = type === 'loan' ? '1' : '';
         }
         function resetAll() {
-            if (!confirm('Reset everything? This will delete all categories, expenses, money-in history, and your total budget.')) return;
-            state = { totalBudget: 0, categories: [], moneyIn: [] }; save(); render(); showToast('All data cleared 🗑️');
+            if (!confirm('Reset everything? This will delete all categories, expenses, and your total budget.')) return;
+            state = { totalBudget: 0, categories: [] }; save(); render(); showToast('All data cleared 🗑️');
         }
         function toggleDataMenu() { document.getElementById('dataMenu').classList.toggle('open') }
         function closeDataMenu() { document.getElementById('dataMenu').classList.remove('open') }
